@@ -1,10 +1,28 @@
 $(() => {
   console.log('JS & jQuery Loaded');
 
-// Create an object of battleships
+  // Create the 10x10 grids
+
+
+
+  // for (var i = 0; i < tile; i++) {
+  //   $boardOneContainer.prepend('div').attr('class', 'board1');
+  // }
+  const div = '<div class="board1"></div>';
+  const div2 = '<div class="board1"></div>';
+  const $boardOne = $('.boardOne');
+  const $boardTwo = $('.boardTwo');
+  const tiles = 100;
+
+  for (var i = 0; i < tiles; i++) {
+    $boardOne.append($(div));
+    $boardTwo.append($(div2));
+  }
+
+  // Create an object of battleships
   const boats = {'Battleship': 3, 'Submarine': 2};
 
-// Create function that randomly assigns where battleship should be in an array
+  // Create function that randomly assigns where battleship should be in an array
 
   const $board1 = $('.board1');
   console.log($board1);
@@ -85,14 +103,14 @@ $(() => {
 
 
 
-// Create function that hides Computer battleships
+  // Create function that hides Computer battleships
 
-// Create function that when you click it checks if this value in the array has been assigned a value
+  // Create function that when you click it checks if this value in the array has been assigned a value
 
-// Assign a 'hit' background-color/X to the tile that has been clicked
+  // Assign a 'hit' background-color/X to the tile that has been clicked
 
-// Create function that checks if whole battleship has the background-color/X if yes, change all background-color to black
+  // Create function that checks if whole battleship has the background-color/X if yes, change all background-color to black
 
-// .
+  // .
 
 });

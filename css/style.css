@@ -7,28 +7,30 @@ main {
 }
 
 .boardOne {
-  width: 250px;
+  width: 450px;
   display: inline-block;
 }
 
 .boardTwo {
-  width: 250px;
+  width: 450px;
   display: inline-block;
 }
 
 .board1 {
   width: 40px;
   height: 40px;
-  background-color: blue;
+  background-color: yellow;
   display: inline-block;
   vertical-align: top;
   text-align: center;
+  border: 1px solid black;
 }
 .board2 {
   width: 40px;
   height: 40px;
-  background-color: blue;
+  background-color: yellow;
   display: inline-block;
   vertical-align: top;
   text-align: center;
+  border: 1px solid black;
 }
