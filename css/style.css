@@ -16,7 +16,7 @@ main {
   display: inline-block;
 }
 
-.tile1 {
+.board1 {
   width: 40px;
   height: 40px;
   background-color: blue;
@@ -24,7 +24,7 @@ main {
   vertical-align: top;
   text-align: center;
 }
-.tile2 {
+.board2 {
   width: 40px;
   height: 40px;
   background-color: blue;
