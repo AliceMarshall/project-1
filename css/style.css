@@ -16,9 +16,19 @@ main {
   display: inline-block;
 }
 
-.tile {
+.tile1 {
   width: 40px;
   height: 40px;
   background-color: blue;
   display: inline-block;
+  vertical-align: top;
+  text-align: center;
+}
+.tile2 {
+  width: 40px;
+  height: 40px;
+  background-color: blue;
+  display: inline-block;
+  vertical-align: top;
+  text-align: center;
 }
