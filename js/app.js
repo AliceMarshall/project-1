@@ -9,45 +9,46 @@ $(() => {
   const $tile1 = $('.tile1');
   console.log($tile1);
 
+  let randNum;
+
   function randomTile() {
-    const randNum = parseInt(Math.random() * $tile1.length);
+    return randNum = parseInt(Math.random() * $tile1.length);
+  }
+
+  // const direction = parseInt(Math.random() * 2);
+  // const horizontal = 0;
+  // const vertical = 1;
+  // console.log(direction);
+  // let directionArray;
+  const width = 5;
+
+  function assignBattleship() {
+    randomTile();
     console.log(randNum);
-  }
-
-
-  const direction = parseInt(Math.random() * 2);
-  const horizontal = 0;
-  const vertical = 1;
-  console.log(direction);
-  let directionArray;
-
-  // function XorY() {
-  //   if (direction === horizontal) {
-  //     return directionArray = xArray;
-  //   }
-  //   if (direction === vertical) {
-  //     return directionArray = yArray;
-  //   }
-  // }
-
-  // const xArray = [[0,1,2,3,4], [5,6,7,8,9], [10,11,12,13,14], [15,16,17,18,19], [20,21,22,23,24]];
-  // const yArray = [[0,5,10,15,20], [1,6,11,16,21], [2,7,12,17,22], [3,8,13,18,23], [4,9,14,19,24]];
-
-  function assignShip() {
-    $tile1.eq(randNum).html('X');
-    XorY();
-    for (var i = 0; i < directionArray.length; i++) {
-      if (directionArray[i].includes(randNum)) {
-        return i;
+    const indexPlus = (randNum + 1) % width;
+    if ($tile1.eq(randNum).html() === '') {
+      if (indexPlus === width - 1) {
+        return assignBattleship();
+      } else if (indexPlus === width - 2) {
+        return assignBattleship();
+      } else if (indexPlus === width - 3 && $tile1.eq(randNum + 1).html() === '' && $tile1.eq(randNum + 2).html() === '' && $tile1.eq(randNum + 3).html() === '') {
+        $tile1.eq(randNum).html('B');
+        $tile1.eq(randNum + 1).html('B');
+        $tile1.eq(randNum + 2).html('B');
+        $tile1.eq(randNum + 3).html('B');
+      } else if (indexPlus === width - 4 && $tile1.eq(randNum + 1).html() === '' && $tile1.eq(randNum + 2).html() === '' && $tile1.eq(randNum + 3).html() === '') {
+        $tile1.eq(randNum).html('B');
+        $tile1.eq(randNum + 1).html('B');
+        $tile1.eq(randNum + 2).html('B');
+        $tile1.eq(randNum + 3).html('B');
+      } else {
+        return assignBattleship();
       }
-
+    } else {
+      return assignBattleship();
     }
-
-    // if (horizontal === direction) {
-    //
-    // }
   }
-  assignShip();
+  assignBattleship();
 
 // Create function that hides Computer battleships
 
