@@ -3,5 +3,22 @@ body {
 }
 
 main {
+ display: inline-block;
+}
 
+.boardOne {
+  width: 200px;
+  display: inline-block;
+}
+
+.boardTwo {
+  width: 200px;
+  display: inline-block;
+}
+
+.tile {
+  width: 40px;
+  height: 40px;
+  background-color: blue;
+  display: inline-block;
 }
