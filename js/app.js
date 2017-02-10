@@ -2,14 +2,8 @@ $(() => {
   console.log('JS & jQuery Loaded');
 
   // Create the 10x10 grids
-
-
-
-  // for (var i = 0; i < tile; i++) {
-  //   $boardOneContainer.prepend('div').attr('class', 'board1');
-  // }
   const div = '<div class="board1"></div>';
-  const div2 = '<div class="board1"></div>';
+  const div2 = '<div class="board2"></div>';
   const $boardOne = $('.boardOne');
   const $boardTwo = $('.boardTwo');
   const tiles = 100;
@@ -20,14 +14,14 @@ $(() => {
   }
 
   // Create an object of battleships
-  const boats = {'Battleship': 3, 'Submarine': 2};
+  const boats = {'Battleship': 4, 'Submarine': 3};
 
   // Create function that randomly assigns where battleship should be in an array
 
   const $board1 = $('.board1');
   console.log($board1);
   let randNum;
-  const width = 5;
+  const width = 10;
 
   function randomTile() {
     return randNum = parseInt(Math.random() * $board1.length);
@@ -42,25 +36,33 @@ $(() => {
     }
   }
 
+  // create variable for either board 1 or board 2
+  
+
   function assignBattleshipX() {
     randomTile();
     console.log(randNum);
     const indexPlus = (randNum + 1) % width;
     if ($board1.eq(randNum).html() === '') {
+
       if (indexPlus === width - 1) {
         return assignBattleshipX();
+
       } else if (indexPlus === width - 2) {
         return assignBattleshipX();
+
       } else if (indexPlus === width - 3 && $board1.eq(randNum + 1).html() === '' && $board1.eq(randNum + 2).html() === '' && $board1.eq(randNum + 3).html() === '') {
         $board1.eq(randNum).html('B');
         $board1.eq(randNum + 1).html('B');
         $board1.eq(randNum + 2).html('B');
         $board1.eq(randNum + 3).html('B');
+
       } else if (indexPlus === width - 4 && $board1.eq(randNum + 1).html() === '' && $board1.eq(randNum + 2).html() === '' && $board1.eq(randNum + 3).html() === '') {
         $board1.eq(randNum).html('B');
         $board1.eq(randNum + 1).html('B');
         $board1.eq(randNum + 2).html('B');
         $board1.eq(randNum + 3).html('B');
+
       } else {
         return assignBattleshipX();
       }
@@ -98,7 +100,7 @@ $(() => {
     }
   }
 
-  // direction();
+  direction();
 
 
 
