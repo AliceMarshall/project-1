@@ -31,7 +31,7 @@ $(() => {
 
   function direction() {
     // const direction = parseInt(Math.random() * 2);
-    const directionArray = [parseInt(Math.random() * 2), parseInt(Math.random() * 2), parseInt(Math.random() * 2), parseInt(Math.random() * 2), parseInt(Math.random() * 2), parseInt(Math.random() * 2), parseInt(Math.random() * 2), parseInt(Math.random() * 2)];
+    const directionArray = [parseInt(Math.random() * 2), parseInt(Math.random() * 2), parseInt(Math.random() * 2), parseInt(Math.random() * 2), parseInt(Math.random() * 2), parseInt(Math.random() * 2), parseInt(Math.random() * 2), parseInt(Math.random() * 2), parseInt(Math.random() * 2), parseInt(Math.random() * 2)];
     console.log(directionArray);
     directionArray[0] === 0 ? assignCarrierX() : assignCarrierY(); // board 1
     if (directionArray[1] === 0) { // board 2
@@ -57,8 +57,16 @@ $(() => {
       assignSubCruiseY();
       first = true;
     }
-    directionArray[6] === 0 ? assignDestroyerX() : assignDestroyerY(); // board 1
+    directionArray[6] === 0 ? assignSubCruiseX() : assignSubCruiseY(); // board 1
     if (directionArray[7] === 0) { // board 2
+      assignSubCruiseX();
+      first = true;
+    } else {
+      assignSubCruiseY();
+      first = true;
+    }
+    directionArray[8] === 0 ? assignDestroyerX() : assignDestroyerY(); // board 1
+    if (directionArray[9] === 0) { // board 2
       assignDestroyerX();
       first = true;
     } else {
@@ -279,16 +287,13 @@ $(() => {
   }
 
 
-
-  direction();
-
   // Create function that hides Computer battleships
 
-  const board2span = $board2.children();
-  board2span.hide();
+  // const board2span = $board2.children();
+  // board2span.hide();
 
-  // Create function that when you click it checks if this value in the array has been assigned a value
 
+  // Assign a 'miss'/'hit' background-color/X to the tile that has been clicked
   $board2.on('click', (e) => {
     const clicked = $(e.target);
     if (clicked.html() === '') {
@@ -301,7 +306,15 @@ $(() => {
 
   });
 
-  // Assign a 'hit' background-color/X to the tile that has been clicked
+  // Create a click function that initiates boards and the game.
+
+  const $playButton = $('.play-button');
+
+  $playButton.on('click', () => {
+    direction();
+  });
+
+
 
   // Create function that checks if whole battleship has the background-color/X if yes, change all background-color to black
 
