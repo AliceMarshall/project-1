@@ -1,7 +1,7 @@
 $(() => {
   console.log('JS & jQuery Loaded');
 
-  // Create the 10x10 grids
+  // Creates the 10x10 grids
   const div = '<div class="board1"></div>';
   const div2 = '<div class="board2"></div>';
   const $boardOne = $('.boardOne');
@@ -19,7 +19,7 @@ $(() => {
   // Create function that randomly assigns where battleship should be in an array
 
   const $board1 = $('.board1');
-  console.log($board1);
+  const $board2 = $('.board2');
   let randNum;
   const width = 10;
 
@@ -29,6 +29,8 @@ $(() => {
 
   function direction() {
     const direction = parseInt(Math.random() * 2);
+    const directionArray = [parseInt(Math.random() * 2), parseInt(Math.random() * 2), parseInt(Math.random() * 2), parseInt(Math.random() * 2)];
+    console.log(directionArray);
     if (direction === 0) {
       assignBattleshipX();
     } else {
@@ -37,32 +39,64 @@ $(() => {
   }
 
   // create variable for either board 1 or board 2
-  
+  let tile = $board1.eq(randNum);
+  let tile1x = $board1.eq(randNum);
+  let tile2x = $board1.eq(randNum);
+  let tile3x = $board1.eq(randNum);
+  // let tile4x = $board1.eq(randNum);
+  let tile1y = $board1.eq(randNum);
+  let tile2y = $board1.eq(randNum);
+  let tile3y = $board1.eq(randNum);
+  let tile4y = $board1.eq(randNum);
+  let first = true;
 
+  function chooseBoard() {
+    if (first === true) {
+      tile = $board1.eq(randNum);
+      tile1x = $board1.eq(randNum + 1);
+      tile2x = $board1.eq(randNum + 2);
+      tile3x = $board1.eq(randNum + 3);
+      // tile4x = $board1.eq(randNum + 4);
+      tile1y = $board1.eq(randNum + width);
+      tile2y = $board1.eq(randNum + (width * 2));
+      tile3y = $board1.eq(randNum + (width * 3));
+      tile4y = $board1.eq(randNum + (width * 4));
+    } else {
+      tile = $board2.eq(randNum);
+      tile1x = $board2.eq(randNum + 1);
+      tile2x = $board2.eq(randNum + 2);
+      tile3x = $board2.eq(randNum + 3);
+      // tile4x = $board2.eq(randNum + 4);
+      tile1y = $board2.eq(randNum + width);
+      tile2y = $board2.eq(randNum + (width * 2));
+      tile3y = $board2.eq(randNum + (width * 3));
+      // tile4y = $board1.eq(randNum + (width * 4));
+    }
+  }
+
+  // Function to assign Battleships horizontally
   function assignBattleshipX() {
     randomTile();
     console.log(randNum);
     const indexPlus = (randNum + 1) % width;
-    if ($board1.eq(randNum).html() === '') {
-
+    chooseBoard();
+    if (tile.html() === '') {
       if (indexPlus === width - 1) {
         return assignBattleshipX();
-
       } else if (indexPlus === width - 2) {
         return assignBattleshipX();
-
-      } else if (indexPlus === width - 3 && $board1.eq(randNum + 1).html() === '' && $board1.eq(randNum + 2).html() === '' && $board1.eq(randNum + 3).html() === '') {
-        $board1.eq(randNum).html('B');
-        $board1.eq(randNum + 1).html('B');
-        $board1.eq(randNum + 2).html('B');
-        $board1.eq(randNum + 3).html('B');
-
-      } else if (indexPlus === width - 4 && $board1.eq(randNum + 1).html() === '' && $board1.eq(randNum + 2).html() === '' && $board1.eq(randNum + 3).html() === '') {
-        $board1.eq(randNum).html('B');
-        $board1.eq(randNum + 1).html('B');
-        $board1.eq(randNum + 2).html('B');
-        $board1.eq(randNum + 3).html('B');
-
+      } else if (indexPlus === width - 3 && tile1x.html() === '' && tile2x.html() === '' && tile3x.html() === '') {
+        tile.html('B');
+        tile1x.html('B');
+        tile2x.html('B');
+        tile3x.html('B');
+        first = false;
+      } else if (indexPlus === width - 4 && tile1x.html() === '' && tile2x.html() === '' && tile3x.html() === '') {
+        tile.html('B');
+        tile1x.html('B');
+        tile2x.html('B');
+        tile3x.html('B');
+        first = false;
       } else {
         return assignBattleshipX();
       }
@@ -71,28 +105,28 @@ $(() => {
     }
   }
 
+  // Function to assign Battleships vertically
   function assignBattleshipY() {
     randomTile();
     console.log(randNum);
-    const indexPlus = randNum + width;
-    if ($board1.eq(randNum).html() === '') {
-      if ($board1.eq(indexPlus).length === 0) {
+    if (tile.html() === '') {
+      if (tile1y.length === 0) {
         return assignBattleshipY();
-      } else if ($board1.eq(indexPlus + width).length === 0) {
+      } else if (tile2y.length === 0) {
         return assignBattleshipY();
-      } else if ($board1.eq(indexPlus + (2 * width)).length === 0) {
-        return assignBattleshipY();
-      } else if ($board1.eq(indexPlus + (3 * width)).length === 0 && $board1.eq(randNum + 1).html() === '' && $board1.eq(randNum + 2).html() === '' && $board1.eq(randNum + 3).html() === '') {
-        $board1.eq(randNum).html('B');
-        $board1.eq(indexPlus).html('B');
-        $board1.eq(indexPlus + width).html('B');
-        $board1.eq(indexPlus + (2 * width)).html('B');
-      } else if ($board1.eq(indexPlus + (4 * width)).length === 0 && $board1.eq(randNum + 1).html() === '' && $board1.eq(randNum + 2).html() === '' && $board1.eq(randNum + 3).html() === '') {
-        $board1.eq(randNum).html('B');
-        $board1.eq(indexPlus).html('B');
-        $board1.eq(indexPlus + width).html('B');
-        $board1.eq(indexPlus + (2 * width)).html('B');
-      }else {
+      } else if (tile3y.length === 0 && tile1y.html() === '' && tile2y.html() === '' && tile3y.html() === '') {
+        tile.html('B');
+        tile1y.html('B');
+        tile2y.html('B');
+        tile3y.html('B');
+        first = false;
+      } else if (tile4y.length === 0 && tile1y.html() === '' && tile2y.html() === '' && tile3y.html() === '') {
+        tile.html('B');
+        tile1y.html('B');
+        tile2y.html('B');
+        tile3y.html('B');
+        first = false;
+      } else {
         return assignBattleshipY();
       }
     } else {
@@ -100,7 +134,10 @@ $(() => {
     }
   }
 
-  direction();
+
+  assignBattleshipX();
+  assignBattleshipX();
+  // direction();
 
 
 
