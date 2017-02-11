@@ -1,5 +1,4 @@
 $(() => {
-  console.log('JS & jQuery Loaded');
 
   // Creates the 10x10 grids
   const div = '<div class="board1"></div>';
@@ -28,10 +27,15 @@ $(() => {
   }
 
   function direction() {
-    const direction = parseInt(Math.random() * 2);
-    const directionArray = [parseInt(Math.random() * 2), parseInt(Math.random() * 2), parseInt(Math.random() * 2), parseInt(Math.random() * 2)];
+    // const direction = parseInt(Math.random() * 2);
+    const directionArray = [parseInt(Math.random() * 2), parseInt(Math.random() * 2)];
     console.log(directionArray);
-    if (direction === 0) {
+    if (directionArray[0] === 0) {
+      assignBattleshipX();
+    } else {
+      assignBattleshipY();
+    }
+    if (directionArray[1] === 0) {
       assignBattleshipX();
     } else {
       assignBattleshipY();
@@ -70,38 +74,7 @@ $(() => {
       tile1y = $board2.eq(randNum + width);
       tile2y = $board2.eq(randNum + (width * 2));
       tile3y = $board2.eq(randNum + (width * 3));
-      // tile4y = $board1.eq(randNum + (width * 4));
-    }
-  }
-
-  // Function to assign Battleships horizontally
-  function assignBattleshipX() {
-    randomTile();
-    console.log(randNum);
-    const indexPlus = (randNum + 1) % width;
-    chooseBoard();
-    if (tile.html() === '') {
-      if (indexPlus === width - 1) {
-        return assignBattleshipX();
-      } else if (indexPlus === width - 2) {
-        return assignBattleshipX();
-      } else if (indexPlus === width - 3 && tile1x.html() === '' && tile2x.html() === '' && tile3x.html() === '') {
-        tile.html('B');
-        tile1x.html('B');
-        tile2x.html('B');
-        tile3x.html('B');
-        first = false;
-      } else if (indexPlus === width - 4 && tile1x.html() === '' && tile2x.html() === '' && tile3x.html() === '') {
-        tile.html('B');
-        tile1x.html('B');
-        tile2x.html('B');
-        tile3x.html('B');
-        first = false;
-      } else {
-        return assignBattleshipX();
-      }
-    } else {
-      return assignBattleshipX();
+      tile4y = $board2.eq(randNum + (width * 4));
     }
   }
 
@@ -109,22 +82,19 @@ $(() => {
   function assignBattleshipY() {
     randomTile();
     console.log(randNum);
+    chooseBoard();
     if (tile.html() === '') {
       if (tile1y.length === 0) {
         return assignBattleshipY();
       } else if (tile2y.length === 0) {
         return assignBattleshipY();
-      } else if (tile3y.length === 0 && tile1y.html() === '' && tile2y.html() === '' && tile3y.html() === '') {
-        tile.html('B');
-        tile1y.html('B');
-        tile2y.html('B');
-        tile3y.html('B');
-        first = false;
-      } else if (tile4y.length === 0 && tile1y.html() === '' && tile2y.html() === '' && tile3y.html() === '') {
-        tile.html('B');
-        tile1y.html('B');
-        tile2y.html('B');
-        tile3y.html('B');
+      } else if (tile3y.length === 0) {
+        return assignBattleshipY();
+      } else if (tile1y.html() === '' && tile2y.html() === '' && tile3y.html() === '') {
+        tile.html('<span>B</span>');
+        tile1y.html('<span>B</span>');
+        tile2y.html('<span>B</span>');
+        tile3y.html('<span>B</span>');
         first = false;
       } else {
         return assignBattleshipY();
@@ -134,15 +104,40 @@ $(() => {
     }
   }
 
+    // Function to assign Battleships horizontally
+  function assignBattleshipX() {
+    randomTile();
+    console.log(randNum);
+    const indexPlus = (randNum + 1) % width;
+    chooseBoard();
+    if (tile.html() === '') {
+      if (indexPlus === 0) {
+        return assignBattleshipX();
+      } else if (indexPlus === width - 1) {
+        return assignBattleshipX();
+      } else if (indexPlus === width - 2) {
+        return assignBattleshipX();
+      } else if (tile1x.html() === '' && tile2x.html() === '' && tile3x.html() === '') {
+        tile.html('<span>B</span>');
+        tile1x.html('<span>B</span>');
+        tile2x.html('<span>B</span>');
+        tile3x.html('<span>B</span>');
+        first = false;
+      } else {
+        return assignBattleshipX();
+      }
+    } else {
+      return assignBattleshipX();
+    }
+  }
 
-  assignBattleshipX();
-  assignBattleshipX();
-  // direction();
-
-
-
+  direction();
 
   // Create function that hides Computer battleships
+
+  const board2span = $board2.children();
+  board2span.hide();
+
 
   // Create function that when you click it checks if this value in the array has been assigned a value
 
