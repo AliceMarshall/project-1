@@ -13,15 +13,16 @@ $(() => {
   }
 
   // Create an object of battleships
-  const boats = {'Carrier': 5, 'Battleship': 4, 'Cruiser': 3, 'Submarine': 3, 'Destroyer': 2};
+  // const boats = {'Carrier': 5, 'Battleship': 4, 'Cruiser': 3, 'Submarine': 3, 'Destroyer': 2};
   const boatArray = [5,4,3,2];
   console.log(boatArray);
 
-  // Create function that randomly assigns where battleship should be in an array
 
+  // Create function that randomly assigns where battleship should be in an array
   const $board1 = $('.board1');
   const $board2 = $('.board2');
   let randNum;
+  let first = true;
   const width = 10;
 
   function randomTile() {
@@ -30,17 +31,39 @@ $(() => {
 
   function direction() {
     // const direction = parseInt(Math.random() * 2);
-    const directionArray = [parseInt(Math.random() * 2), parseInt(Math.random() * 2)];
+    const directionArray = [parseInt(Math.random() * 2), parseInt(Math.random() * 2), parseInt(Math.random() * 2), parseInt(Math.random() * 2), parseInt(Math.random() * 2), parseInt(Math.random() * 2), parseInt(Math.random() * 2), parseInt(Math.random() * 2)];
     console.log(directionArray);
-    if (directionArray[0] === 0) {
-      assignBattleshipX();
+    directionArray[0] === 0 ? assignCarrierX() : assignCarrierY(); // board 1
+    if (directionArray[1] === 0) { // board 2
+      assignCarrierX();
+      first = true;
     } else {
-      assignBattleshipY();
+      assignCarrierY();
+      first = true;
     }
-    if (directionArray[1] === 0) {
+    directionArray[2] === 0 ? assignBattleshipX() : assignBattleshipY(); // board 1
+    if (directionArray[3] === 0) { // board 2
       assignBattleshipX();
+      first = true;
     } else {
       assignBattleshipY();
+      first = true;
+    }
+    directionArray[4] === 0 ? assignSubCruiseX() : assignSubCruiseY(); // board 1
+    if (directionArray[5] === 0) { // board 2
+      assignSubCruiseX();
+      first = true;
+    } else {
+      assignSubCruiseY();
+      first = true;
+    }
+    directionArray[6] === 0 ? assignDestroyerX() : assignDestroyerY(); // board 1
+    if (directionArray[7] === 0) { // board 2
+      assignDestroyerX();
+      first = true;
+    } else {
+      assignSubCruiseY();
+      first = true;
     }
   }
 
@@ -49,12 +72,11 @@ $(() => {
   let tile1x = $board1.eq(randNum);
   let tile2x = $board1.eq(randNum);
   let tile3x = $board1.eq(randNum);
-  // let tile4x = $board1.eq(randNum);
+  let tile4x = $board1.eq(randNum);
   let tile1y = $board1.eq(randNum);
   let tile2y = $board1.eq(randNum);
   let tile3y = $board1.eq(randNum);
   let tile4y = $board1.eq(randNum);
-  let first = true;
 
   function chooseBoard() {
     if (first === true) {
@@ -62,7 +84,7 @@ $(() => {
       tile1x = $board1.eq(randNum + 1);
       tile2x = $board1.eq(randNum + 2);
       tile3x = $board1.eq(randNum + 3);
-      // tile4x = $board1.eq(randNum + 4);
+      tile4x = $board1.eq(randNum + 4);
       tile1y = $board1.eq(randNum + width);
       tile2y = $board1.eq(randNum + (width * 2));
       tile3y = $board1.eq(randNum + (width * 3));
@@ -72,7 +94,7 @@ $(() => {
       tile1x = $board2.eq(randNum + 1);
       tile2x = $board2.eq(randNum + 2);
       tile3x = $board2.eq(randNum + 3);
-      // tile4x = $board2.eq(randNum + 4);
+      tile4x = $board2.eq(randNum + 4);
       tile1y = $board2.eq(randNum + width);
       tile2y = $board2.eq(randNum + (width * 2));
       tile3y = $board2.eq(randNum + (width * 3));
@@ -80,7 +102,54 @@ $(() => {
     }
   }
 
-  // Function to assign Battleships horizontally
+  // Function to assign CARRIER HORIZONTALLY
+  function assignCarrierX() {
+    randomTile();
+    console.log(randNum);
+    const indexPlus = (randNum + 1) % width;
+    chooseBoard();
+    if (tile.html() === '') {
+      if (indexPlus === 0 || indexPlus === width - 1 || indexPlus === width - 2 || indexPlus === width - 3) {
+        return assignCarrierX();
+      } else if (tile1x.html() === '' && tile2x.html() === '' && tile3x.html() === '' && tile3x.html() === '') {
+        tile.html('<span>C</span>');
+        tile1x.html('<span>C</span>');
+        tile2x.html('<span>C</span>');
+        tile3x.html('<span>C</span>');
+        tile4x.html('<span>C</span>');
+        first = false;
+      } else {
+        return assignCarrierX();
+      }
+    } else {
+      return assignCarrierX();
+    }
+  }
+
+  // Function to assign CARRIER VERTICALLY
+  function assignCarrierY() {
+    randomTile();
+    console.log(randNum);
+    chooseBoard();
+    if (tile.html() === '') {
+      if (tile1y.length === 0 || tile2y.length === 0 || tile3y.length === 0 || tile4y.length === 0) {
+        return assignCarrierY();
+      } else if (tile1y.html() === '' && tile2y.html() === '' && tile3y.html() === '' && tile3y.html() === '') {
+        tile.html('<span>C</span>');
+        tile1y.html('<span>C</span>');
+        tile2y.html('<span>C</span>');
+        tile3y.html('<span>C</span>');
+        tile4y.html('<span>C</span>');
+        first = false;
+      } else {
+        return assignCarrierY();
+      }
+    } else {
+      return assignCarrierY();
+    }
+  }
+
+  // Function to assign BATTLESHIPS HORIZONTALLY
   function assignBattleshipX() {
     randomTile();
     console.log(randNum);
@@ -103,30 +172,7 @@ $(() => {
     }
   }
 
-  // Function to assign CARRIER vertically
-  function assignCarrierY() {
-    randomTile();
-    console.log(randNum);
-    chooseBoard();
-    if (tile.html() === '') {
-      if (tile1y.length === 0 || tile2y.length === 0 || tile3y.length === 0 || tile4y.length === 0) {
-        return assignCarrierY();
-      } else if (tile1y.html() === '' && tile2y.html() === '' && tile3y.html() === '' && tile3y.html() === '') {
-        tile.html('<span>B</span>');
-        tile1y.html('<span>B</span>');
-        tile2y.html('<span>B</span>');
-        tile3y.html('<span>B</span>');
-        tile4y.html('<span>B</span>');
-        first = false;
-      } else {
-        return assignCarrierY();
-      }
-    } else {
-      return assignCarrierY();
-    }
-  }
-
-  // Function to assign BATTLESHIPS vertically
+  // Function to assign BATTLESHIPS VERTICALLY
   function assignBattleshipY() {
     randomTile();
     console.log(randNum);
@@ -148,7 +194,29 @@ $(() => {
     }
   }
 
-  // Function to assign BATTLESHIPS vertically
+  // Function to assign SUB/CRUISER HORIZONTALLY
+  function assignSubCruiseX() {
+    randomTile();
+    console.log(randNum);
+    const indexPlus = (randNum + 1) % width;
+    chooseBoard();
+    if (tile.html() === '') {
+      if (indexPlus === 0 || indexPlus === width - 1) {
+        return assignSubCruiseX();
+      } else if (tile1x.html() === '' && tile2x.html() === '') {
+        tile.html('<span>S</span>');
+        tile1x.html('<span>S</span>');
+        tile2x.html('<span>S</span>');
+        first = false;
+      } else {
+        return assignSubCruiseX();
+      }
+    } else {
+      return assignSubCruiseX();
+    }
+  }
+
+  // Function to assign SUB/CRUISER VERTICALLY
   function assignSubCruiseY() {
     randomTile();
     console.log(randNum);
@@ -157,9 +225,9 @@ $(() => {
       if (tile1y.length === 0 || tile2y.length === 0) {
         return assignSubCruiseY();
       } else if (tile1y.html() === '' && tile2y.html() === '') {
-        tile.html('<span>B</span>');
-        tile1y.html('<span>B</span>');
-        tile2y.html('<span>B</span>');
+        tile.html('<span>S</span>');
+        tile1y.html('<span>S</span>');
+        tile2y.html('<span>S</span>');
         first = false;
       } else {
         return assignSubCruiseY();
@@ -169,7 +237,28 @@ $(() => {
     }
   }
 
-  // Function to assign BATTLESHIPS vertically
+  // Function to assign DESTROYER HORIZONTALLY
+  function assignDestroyerX() {
+    randomTile();
+    console.log(randNum);
+    const indexPlus = (randNum + 1) % width;
+    chooseBoard();
+    if (tile.html() === '') {
+      if (indexPlus === 0) {
+        return assignDestroyerX();
+      } else if (tile1x.html() === '') {
+        tile.html('<span>D</span>');
+        tile1x.html('<span>D</span>');
+        first = false;
+      } else {
+        return assignDestroyerX();
+      }
+    } else {
+      return assignDestroyerX();
+    }
+  }
+
+  // Function to assign DESTROYER VERTICALLY
   function assignDestroyerY() {
     randomTile();
     console.log(randNum);
@@ -178,8 +267,8 @@ $(() => {
       if (tile1y.length === 0) {
         return assignDestroyerY();
       } else if (tile1y.html() === '') {
-        tile.html('<span>B</span>');
-        tile1y.html('<span>B</span>');
+        tile.html('<span>D</span>');
+        tile1y.html('<span>D</span>');
         first = false;
       } else {
         return assignDestroyerY();
@@ -188,23 +277,10 @@ $(() => {
       return assignDestroyerY();
     }
   }
-  
-  function loopShipAssign() {
-    for (var i = 0; i < boatArray.length; i++) {
-      if (boatArray[i] === '5') {
-        assignCarrierY();
-      } else if (boatArray[i] === '4') {
-        assignBattleshipY();
-      } else if (boatArray[i] === '3') {
-        assignSubCruiseY();
-      } else if (boatArray[i] === '2') {
-        assignDestroyerY();
-      }
-    }
-  }
 
-  loopShipAssign();
-  // direction();
+
+
+  direction();
 
   // Create function that hides Computer battleships
 
