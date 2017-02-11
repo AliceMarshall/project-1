@@ -34,3 +34,11 @@ main {
   text-align: center;
   border: 1px solid black;
 }
+
+.miss {
+  background-color: grey;
+}
+
+.hit {
+  background-color: red;
+}
