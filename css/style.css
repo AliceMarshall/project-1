@@ -1,5 +1,6 @@
 body {
   background-color: silver;
+  font-family: 'Rubik Mono One', sans-serif;
 }
 
 main {
@@ -61,6 +62,8 @@ button {
 
 .result {
   font-size: 70px;
+  color: grey;
+  text-align: center;
 }
 
 .ship {

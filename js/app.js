@@ -115,7 +115,7 @@ $(() => {
     randomTile();
     const indexPlus = (randNum + 1) % width;
     chooseBoard();
-    if (!(tile.hasClass('ship'))) {
+    if (!tile.hasClass('ship')) {
       if (indexPlus === 0 || indexPlus === width - 1 || indexPlus === width - 2 || indexPlus === width - 3) {
         return assignCarrierX();
       } else if (!(tile1x.hasClass('ship') && tile2x.hasClass('ship') && tile3x.hasClass('ship') && tile4x.hasClass('ship'))) {
@@ -137,7 +137,7 @@ $(() => {
   function assignCarrierY() {
     randomTile();
     chooseBoard();
-    if (!(tile.hasClass('ship'))) {
+    if (!tile.hasClass('ship')) {
       if (tile1y.length === 0 || tile2y.length === 0 || tile3y.length === 0 || tile4y.length === 0) {
         return assignCarrierY();
       } else if (!(tile1y.hasClass('ship') && tile2y.hasClass('ship') && tile3y.hasClass('ship') && tile4y.hasClass('ship'))) {
@@ -160,7 +160,7 @@ $(() => {
     randomTile();
     const indexPlus = (randNum + 1) % width;
     chooseBoard();
-    if (!(tile.hasClass('ship'))) {
+    if (!tile.hasClass('ship')) {
       if (indexPlus === 0 || indexPlus === width - 1 || indexPlus === width - 2) {
         return assignBattleshipX();
       } else if (!(tile1x.hasClass('ship') && tile2x.hasClass('ship') && tile3x.hasClass('ship'))) {
@@ -181,7 +181,7 @@ $(() => {
   function assignBattleshipY() {
     randomTile();
     chooseBoard();
-    if (!(tile.hasClass('ship'))) {
+    if (!tile.hasClass('ship')) {
       if (tile1y.length === 0 || tile2y.length === 0 || tile3y.length === 0) {
         return assignBattleshipY();
       } else if (!(tile1y.hasClass('ship') && tile2y.hasClass('ship') && tile3y.hasClass('ship'))) {
@@ -203,7 +203,7 @@ $(() => {
     randomTile();
     const indexPlus = (randNum + 1) % width;
     chooseBoard();
-    if (!(tile.hasClass('ship'))) {
+    if (!tile.hasClass('ship')) {
       if (indexPlus === 0 || indexPlus === width - 1) {
         return assignSubCruiseX();
       } else if (!(tile1x.hasClass('ship') && tile2x.hasClass('ship'))) {
@@ -223,7 +223,7 @@ $(() => {
   function assignSubCruiseY() {
     randomTile();
     chooseBoard();
-    if (!(tile.hasClass('ship'))) {
+    if (!tile.hasClass('ship')) {
       if (tile1y.length === 0 || tile2y.length === 0) {
         return assignSubCruiseY();
       } else if (!(tile1y.hasClass('ship') && tile2y.hasClass('ship'))) {
@@ -244,7 +244,7 @@ $(() => {
     randomTile();
     const indexPlus = (randNum + 1) % width;
     chooseBoard();
-    if (!(tile.hasClass('ship'))) {
+    if (!tile.hasClass('ship')) {
       if (indexPlus === 0) {
         return assignDestroyerX();
       } else if (!(tile1x.hasClass('ship'))) {
@@ -263,7 +263,7 @@ $(() => {
   function assignDestroyerY() {
     randomTile();
     chooseBoard();
-    if (!(tile.hasClass('ship'))) {
+    if (!tile.hasClass('ship')) {
       if (tile1y.length === 0) {
         return assignDestroyerY();
       } else if (!(tile1y.hasClass('ship'))) {
@@ -296,9 +296,21 @@ $(() => {
   $result.hide();
   const $playButton = $('.play-button');
 
+  function clearClasses() {
+    for (var i = 0; i < tiles; i++) {
+      $board1.attr('class', 'board1');
+      $board2.attr('class', 'board2');
+    }
+  }
+
+
   $playButton.on('click', () => {
+    clearClasses();
+    $boardOne.show();
+    $boardTwo.show();
     $result.hide();
     direction();
+    $playButton.html('Play Again ?');
   });
 
   // Create function that checks if whole battleship has the background-color/X if yes, change all background-color to black
@@ -365,19 +377,20 @@ $(() => {
   }
 
   function winLoseCheck() {
+    countPlayer = $('.board2.hit').length;
+    console.log(countPlayer);
+    countComp = $('.board1.hit').length;
     for (i = 0; i < $board2.length; i++) {
-      countPlayer = $('.board2 .hit').length;
-      countComp = $('.board1 .hit').length;
       if (countPlayer === boatArray.reduce(add, 0)) {
         $boardOne.hide();
         $boardTwo.hide();
-        $result.html('You sunk my battleships! WINNER!');
+        $result.html(`YOU SUNK MY BATTLESHIPS!`);
         $result.show();
       }
       if (countComp === boatArray.reduce(add, 0)) {
         $boardOne.hide();
         $boardTwo.hide();
-        $result.html('I sunk your battleships! LOSER!');
+        $result.html('I SUNK YOUR BATTLESHIPS! LOSER!');
         $result.show();
       }
     }
