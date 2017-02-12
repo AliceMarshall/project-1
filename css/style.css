@@ -1,34 +1,58 @@
 body {
-  background-color: red;
+  background-color: silver;
 }
 
 main {
- display: inline-block;
+  margin: 0 auto;
+  display: block;
+  text-align: center;
+  max-width: 1200px;
+  /*background-color: grey;*/
+  position: relative;
+}
+
+#title {
+  margin: 0 auto;
+}
+
+button {
+  margin: 0 auto;
+  background-color: lightblue;
+  border: none;
+  color: black;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: block;
+  font-size: 16px;
+  font-weight: bold;
 }
 
 .boardOne {
-  width: 450px;
+  width: 500px;
   display: inline-block;
 }
 
 .boardTwo {
-  width: 450px;
+  width: 500px;
   display: inline-block;
 }
 
 .board1 {
-  width: 40px;
-  height: 40px;
-  background-color: yellow;
+  width: 45px;
+  height: 45px;
+  background-image: url('../images/wave2.jpg');
+  background-size: cover;
   display: inline-block;
   vertical-align: top;
   text-align: center;
   border: 1px solid black;
 }
 .board2 {
-  width: 40px;
-  height: 40px;
-  background-color: yellow;
+  width: 45px;
+  height: 45px;
+  background-image: url('../images/wave2.jpg');
+  background-size: cover;
   display: inline-block;
   vertical-align: top;
   text-align: center;
@@ -36,7 +60,7 @@ main {
 }
 
 .miss {
-  background-color: grey;
+  background-color: white;
 }
 
 .hit {

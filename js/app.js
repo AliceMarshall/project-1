@@ -288,23 +288,26 @@ $(() => {
 
 
   // Create function that hides Computer battleships
-
-  // const board2span = $board2.children();
-  // board2span.hide();
-
+  // let board2span;
+  //
+  // function hideBoard2() {
+  //   board2span = $board2.children();
+  //   board2span.hide();
+  // }
 
   // Assign a 'miss'/'hit' background-color/X to the tile that has been clicked
-  // $board2.on('click', (e) => {
-  //   const clicked = $(e.target);
-  //   if (clicked.html() === '') {
-  //     clicked.addClass('miss');
-  //   }
-  //   // if (clicked.html() === '<span>B</span>') {
-  //   //   board2span.show();
-  //   //   clicked.addClass('hit');
-  //   // }
-  //
-  // });
+  $board2.on('click', (e) => {
+    const clicked = $(e.target);
+    console.log(clicked);
+    console.log($(e.target));
+    if (!clicked.html()) {
+      clicked.addClass('miss');
+      computersGo();
+    } else {
+      clicked.addClass('hit');
+      computersGo();
+    }
+  });
 
   // Create a click function that initiates boards and the game.
 
@@ -312,6 +315,7 @@ $(() => {
 
   $playButton.on('click', () => {
     direction();
+    // hideBoard2();
   });
 
 
@@ -321,56 +325,45 @@ $(() => {
   //
 
   // create a function that when you click on the board the computer also randomly clicks on the other board, and follow the same hit or miss principles
-
-  $board2.on('click', (e) => {
-    const clicked = $(e.target);
-    if (clicked.html() === '') {
-      clicked.addClass('miss');
-      computersGo();
-    }
-    // if (clicked.html() === '<span>B</span>') {
-    //   board2span.show();
-    //   clicked.addClass('hit');
-    // }
-
-  });
-
-  let attackMode = false;
-
-  function computersGo() {
-    randomTile();
-    if (tile === '') {
-      tile.addClass('miss');
-    }
-    if (!(tile === '')) {
-      tile.addClass('hit');
-      attackMode = true;
-      if (attackMode === true) {
-
-      }
-    }
-  }
-
   let x;
   let y;
-  let coordArray;
-
+  let coordObj;
+  // let attackMode = false;
+  // let hitX = 1;
+  // let hitY = 1;
+  // let index;
 
   function makeCoords() {
-    coordArray = [];
-    for (i = 0; i < $board1.length; i++) {
+    coordObj = {};
+    for (i = 0; i < 100; i++) {
       if (i % width === 0) {
         x = (i % width) + 1;
         y = (i / 10) + 1;
-        coordArray.push([x,y]);
+        coordObj[i] = [x,y];
       } else if (i % width === 1 || i % width === 2 || i % width === 3 || i % width === 4 || i % width === 5 || i % width === 6 || i % width === 7 || i % width === 8 || i % width === 9) {
         x = (i % width) + 1;
         y = Math.ceil(i / 10);
-        coordArray.push([x,y]);
+        coordObj[i] = [x,y];
       }
     }
   }
   makeCoords();
+
+  function computersGo() {
+    randomTile();
+    // index = randNum;
+    if (!$board1.eq(randNum).html()) {
+      console.log($board1.eq(randNum));
+      $board1.eq(randNum).addClass('miss');
+    } else {
+      $board1.eq(randNum).addClass('hit');
+      // attackMode = true;
+      // hitX = coordObj[i][0];
+      // hitY = coordObj[i][1];
+    }
+  }
+
+
 
 
 
