@@ -59,6 +59,10 @@ button {
   border: 1px solid black;
 }
 
+.result {
+  font-size: 70px;
+}
+
 .ship {
   background-color: grey;
 }

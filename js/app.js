@@ -14,7 +14,7 @@ $(() => {
 
   // Create an object of battleships
   // const boats = {'Carrier': 5, 'Battleship': 4, 'Cruiser': 3, 'Submarine': 3, 'Destroyer': 2};
-  const boatArray = [5,4,3,2];
+  const boatArray = [5,4,3,3,2];
   console.log(boatArray);
 
 
@@ -70,7 +70,7 @@ $(() => {
       assignDestroyerX();
       first = true;
     } else {
-      assignSubCruiseY();
+      assignDestroyerY();
       first = true;
     }
   }
@@ -278,20 +278,9 @@ $(() => {
     }
   }
 
-
-  // Create function that hides Computer battleships
-  // let board2span;
-  //
-  // function hideBoard2() {
-  //   board2span = $board2.children();
-  //   board2span.hide();
-  // }
-
   // Assign a 'miss'/'hit' background-color/X to the tile that has been clicked
   $board2.on('click', (e) => {
     const clicked = $(e.target);
-    console.log(clicked);
-    console.log($(e.target));
     if (clicked.hasClass('ship')) {
       clicked.addClass('hit');
       computersGo();
@@ -303,18 +292,17 @@ $(() => {
 
   // Create a click function that initiates boards and the game.
 
+  const $result = $('.result');
+  $result.hide();
   const $playButton = $('.play-button');
 
   $playButton.on('click', () => {
+    $result.hide();
     direction();
-    // hideBoard2();
   });
-
-
 
   // Create function that checks if whole battleship has the background-color/X if yes, change all background-color to black
 
-  //
 
   // create a function that when you click on the board the computer also randomly clicks on the other board, and follow the same hit or miss principles
   let x;
@@ -355,6 +343,7 @@ $(() => {
     } else {
       gameBoard.addClass('miss');
     }
+    winLoseCheck();
       // attackMode = true;
       // hitX = coordObj[i][0];
       // hitY = coordObj[i][1];
@@ -364,11 +353,35 @@ $(() => {
 
   // inside function above it also needs to be smart and when a hit is made it checks all squares adjacent
 
-  // make click function work for the spans
-
   // instead of B change to a background colour
 
   // check if you sunk a whole ship every time someone clicks
+
+  let countPlayer;
+  let countComp;
+
+  function add(a, b) {
+    return a + b;
+  }
+
+  function winLoseCheck() {
+    for (i = 0; i < $board2.length; i++) {
+      countPlayer = $('.board2 .hit').length;
+      countComp = $('.board1 .hit').length;
+      if (countPlayer === boatArray.reduce(add, 0)) {
+        $boardOne.hide();
+        $boardTwo.hide();
+        $result.html('You sunk my battleships! WINNER!');
+        $result.show();
+      }
+      if (countComp === boatArray.reduce(add, 0)) {
+        $boardOne.hide();
+        $boardTwo.hide();
+        $result.html('I sunk your battleships! LOSER!');
+        $result.show();
+      }
+    }
+  }
 
   // create an animation for when you hit a ship
 
