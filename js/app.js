@@ -294,17 +294,17 @@ $(() => {
 
 
   // Assign a 'miss'/'hit' background-color/X to the tile that has been clicked
-  $board2.on('click', (e) => {
-    const clicked = $(e.target);
-    if (clicked.html() === '') {
-      clicked.addClass('miss');
-    }
-    // if (clicked.html() === '<span>B</span>') {
-    //   board2span.show();
-    //   clicked.addClass('hit');
-    // }
-
-  });
+  // $board2.on('click', (e) => {
+  //   const clicked = $(e.target);
+  //   if (clicked.html() === '') {
+  //     clicked.addClass('miss');
+  //   }
+  //   // if (clicked.html() === '<span>B</span>') {
+  //   //   board2span.show();
+  //   //   clicked.addClass('hit');
+  //   // }
+  //
+  // });
 
   // Create a click function that initiates boards and the game.
 
@@ -318,6 +318,80 @@ $(() => {
 
   // Create function that checks if whole battleship has the background-color/X if yes, change all background-color to black
 
-  // .
+  //
+
+  // create a function that when you click on the board the computer also randomly clicks on the other board, and follow the same hit or miss principles
+
+  $board2.on('click', (e) => {
+    const clicked = $(e.target);
+    if (clicked.html() === '') {
+      clicked.addClass('miss');
+      computersGo();
+    }
+    // if (clicked.html() === '<span>B</span>') {
+    //   board2span.show();
+    //   clicked.addClass('hit');
+    // }
+
+  });
+
+  let attackMode = false;
+
+  function computersGo() {
+    randomTile();
+    if (tile === '') {
+      tile.addClass('miss');
+    }
+    if (!(tile === '')) {
+      tile.addClass('hit');
+      attackMode = true;
+      if (attackMode === true) {
+
+      }
+    }
+  }
+
+  let x;
+  let y;
+  let coordArray;
+
+
+  function makeCoords() {
+    coordArray = [];
+    for (i = 0; i < $board1.length; i++) {
+      if (i % width === 0) {
+        x = (i % width) + 1;
+        y = (i / 10) + 1;
+        coordArray.push([x,y]);
+      } else if (i % width === 1 || i % width === 2 || i % width === 3 || i % width === 4 || i % width === 5 || i % width === 6 || i % width === 7 || i % width === 8 || i % width === 9) {
+        x = (i % width) + 1;
+        y = Math.ceil(i / 10);
+        coordArray.push([x,y]);
+      }
+    }
+  }
+  makeCoords();
+
+
+
+  // inside function above it also needs to be smart and when a hit is made it checks all squares adjacent
+
+  // make click function work for the spans
+
+  // instead of B change to a background colour
+
+  // check if you sunk a whole ship every time someone clicks
+
+  // create an animation for when you hit a ship
+
+  // write instructions
+
+  // create tally
+
+  // change to play game to reset after first click.
+
+  // create a function to add your own battleships to the grid.
+
+  // make it look pretty
 
 });
