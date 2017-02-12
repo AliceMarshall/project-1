@@ -113,18 +113,17 @@ $(() => {
   // Function to assign CARRIER HORIZONTALLY
   function assignCarrierX() {
     randomTile();
-    console.log(randNum);
     const indexPlus = (randNum + 1) % width;
     chooseBoard();
-    if (tile.html() === '') {
+    if (!(tile.hasClass('ship'))) {
       if (indexPlus === 0 || indexPlus === width - 1 || indexPlus === width - 2 || indexPlus === width - 3) {
         return assignCarrierX();
-      } else if (tile1x.html() === '' && tile2x.html() === '' && tile3x.html() === '' && tile3x.html() === '') {
-        tile.html('<span>C</span>');
-        tile1x.html('<span>C</span>');
-        tile2x.html('<span>C</span>');
-        tile3x.html('<span>C</span>');
-        tile4x.html('<span>C</span>');
+      } else if (!(tile1x.hasClass('ship') && tile2x.hasClass('ship') && tile3x.hasClass('ship') && tile4x.hasClass('ship'))) {
+        tile.addClass('ship');
+        tile1x.addClass('ship');
+        tile2x.addClass('ship');
+        tile3x.addClass('ship');
+        tile4x.addClass('ship');
         first = false;
       } else {
         return assignCarrierX();
@@ -137,17 +136,16 @@ $(() => {
   // Function to assign CARRIER VERTICALLY
   function assignCarrierY() {
     randomTile();
-    console.log(randNum);
     chooseBoard();
-    if (tile.html() === '') {
+    if (!(tile.hasClass('ship'))) {
       if (tile1y.length === 0 || tile2y.length === 0 || tile3y.length === 0 || tile4y.length === 0) {
         return assignCarrierY();
-      } else if (tile1y.html() === '' && tile2y.html() === '' && tile3y.html() === '' && tile3y.html() === '') {
-        tile.html('<span>C</span>');
-        tile1y.html('<span>C</span>');
-        tile2y.html('<span>C</span>');
-        tile3y.html('<span>C</span>');
-        tile4y.html('<span>C</span>');
+      } else if (!(tile1y.hasClass('ship') && tile2y.hasClass('ship') && tile3y.hasClass('ship') && tile4y.hasClass('ship'))) {
+        tile.addClass('ship');
+        tile1y.addClass('ship');
+        tile2y.addClass('ship');
+        tile3y.addClass('ship');
+        tile4y.addClass('ship');
         first = false;
       } else {
         return assignCarrierY();
@@ -160,17 +158,16 @@ $(() => {
   // Function to assign BATTLESHIPS HORIZONTALLY
   function assignBattleshipX() {
     randomTile();
-    console.log(randNum);
     const indexPlus = (randNum + 1) % width;
     chooseBoard();
-    if (tile.html() === '') {
+    if (!(tile.hasClass('ship'))) {
       if (indexPlus === 0 || indexPlus === width - 1 || indexPlus === width - 2) {
         return assignBattleshipX();
-      } else if (tile1x.html() === '' && tile2x.html() === '' && tile3x.html() === '') {
-        tile.html('<span>B</span>');
-        tile1x.html('<span>B</span>');
-        tile2x.html('<span>B</span>');
-        tile3x.html('<span>B</span>');
+      } else if (!(tile1x.hasClass('ship') && tile2x.hasClass('ship') && tile3x.hasClass('ship'))) {
+        tile.addClass('ship');
+        tile1x.addClass('ship');
+        tile2x.addClass('ship');
+        tile3x.addClass('ship');
         first = false;
       } else {
         return assignBattleshipX();
@@ -183,16 +180,15 @@ $(() => {
   // Function to assign BATTLESHIPS VERTICALLY
   function assignBattleshipY() {
     randomTile();
-    console.log(randNum);
     chooseBoard();
-    if (tile.html() === '') {
+    if (!(tile.hasClass('ship'))) {
       if (tile1y.length === 0 || tile2y.length === 0 || tile3y.length === 0) {
         return assignBattleshipY();
-      } else if (tile1y.html() === '' && tile2y.html() === '' && tile3y.html() === '') {
-        tile.html('<span>B</span>');
-        tile1y.html('<span>B</span>');
-        tile2y.html('<span>B</span>');
-        tile3y.html('<span>B</span>');
+      } else if (!(tile1y.hasClass('ship') && tile2y.hasClass('ship') && tile3y.hasClass('ship'))) {
+        tile.addClass('ship');
+        tile1y.addClass('ship');
+        tile2y.addClass('ship');
+        tile3y.addClass('ship');
         first = false;
       } else {
         return assignBattleshipY();
@@ -205,16 +201,15 @@ $(() => {
   // Function to assign SUB/CRUISER HORIZONTALLY
   function assignSubCruiseX() {
     randomTile();
-    console.log(randNum);
     const indexPlus = (randNum + 1) % width;
     chooseBoard();
-    if (tile.html() === '') {
+    if (!(tile.hasClass('ship'))) {
       if (indexPlus === 0 || indexPlus === width - 1) {
         return assignSubCruiseX();
-      } else if (tile1x.html() === '' && tile2x.html() === '') {
-        tile.html('<span>S</span>');
-        tile1x.html('<span>S</span>');
-        tile2x.html('<span>S</span>');
+      } else if (!(tile1x.hasClass('ship') && tile2x.hasClass('ship'))) {
+        tile.addClass('ship');
+        tile1x.addClass('ship');
+        tile2x.addClass('ship');
         first = false;
       } else {
         return assignSubCruiseX();
@@ -227,15 +222,14 @@ $(() => {
   // Function to assign SUB/CRUISER VERTICALLY
   function assignSubCruiseY() {
     randomTile();
-    console.log(randNum);
     chooseBoard();
-    if (tile.html() === '') {
+    if (!(tile.hasClass('ship'))) {
       if (tile1y.length === 0 || tile2y.length === 0) {
         return assignSubCruiseY();
-      } else if (tile1y.html() === '' && tile2y.html() === '') {
-        tile.html('<span>S</span>');
-        tile1y.html('<span>S</span>');
-        tile2y.html('<span>S</span>');
+      } else if (!(tile1y.hasClass('ship') && tile2y.hasClass('ship'))) {
+        tile.addClass('ship');
+        tile1y.addClass('ship');
+        tile2y.addClass('ship');
         first = false;
       } else {
         return assignSubCruiseY();
@@ -248,15 +242,14 @@ $(() => {
   // Function to assign DESTROYER HORIZONTALLY
   function assignDestroyerX() {
     randomTile();
-    console.log(randNum);
     const indexPlus = (randNum + 1) % width;
     chooseBoard();
-    if (tile.html() === '') {
+    if (!(tile.hasClass('ship'))) {
       if (indexPlus === 0) {
         return assignDestroyerX();
-      } else if (tile1x.html() === '') {
-        tile.html('<span>D</span>');
-        tile1x.html('<span>D</span>');
+      } else if (!(tile1x.hasClass('ship'))) {
+        tile.addClass('ship');
+        tile1x.addClass('ship');
         first = false;
       } else {
         return assignDestroyerX();
@@ -269,14 +262,13 @@ $(() => {
   // Function to assign DESTROYER VERTICALLY
   function assignDestroyerY() {
     randomTile();
-    console.log(randNum);
     chooseBoard();
-    if (tile.html() === '') {
+    if (!(tile.hasClass('ship'))) {
       if (tile1y.length === 0) {
         return assignDestroyerY();
-      } else if (tile1y.html() === '') {
-        tile.html('<span>D</span>');
-        tile1y.html('<span>D</span>');
+      } else if (!(tile1y.hasClass('ship'))) {
+        tile.addClass('ship');
+        tile1y.addClass('ship');
         first = false;
       } else {
         return assignDestroyerY();
@@ -300,11 +292,11 @@ $(() => {
     const clicked = $(e.target);
     console.log(clicked);
     console.log($(e.target));
-    if (!clicked.html()) {
-      clicked.addClass('miss');
+    if (clicked.hasClass('ship')) {
+      clicked.addClass('hit');
       computersGo();
     } else {
-      clicked.addClass('hit');
+      clicked.addClass('miss');
       computersGo();
     }
   });
@@ -352,18 +344,21 @@ $(() => {
   function computersGo() {
     randomTile();
     // index = randNum;
-    if (!$board1.eq(randNum).html()) {
-      console.log($board1.eq(randNum));
-      $board1.eq(randNum).addClass('miss');
+    const gameBoard = $board1.eq(randNum);
+    if (gameBoard.hasClass('ship')) {
+      gameBoard.removeClass('ship');
+      gameBoard.addClass('hit');
+    } else if (gameBoard.hasClass('hit')) {
+      computersGo();
+    } else if (gameBoard.hasClass('miss')) {
+      computersGo();
     } else {
-      $board1.eq(randNum).addClass('hit');
+      gameBoard.addClass('miss');
+    }
       // attackMode = true;
       // hitX = coordObj[i][0];
       // hitY = coordObj[i][1];
-    }
   }
-
-
 
 
 

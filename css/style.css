@@ -41,7 +41,7 @@ button {
 .board1 {
   width: 45px;
   height: 45px;
-  background-image: url('../images/wave2.jpg');
+  background-color: dodgerblue;
   background-size: cover;
   display: inline-block;
   vertical-align: top;
@@ -51,12 +51,16 @@ button {
 .board2 {
   width: 45px;
   height: 45px;
-  background-image: url('../images/wave2.jpg');
+  background-color: dodgerblue;
   background-size: cover;
   display: inline-block;
   vertical-align: top;
   text-align: center;
   border: 1px solid black;
+}
+
+.ship {
+  background-color: grey;
 }
 
 .miss {
