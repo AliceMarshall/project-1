@@ -13,98 +13,28 @@ $(() => {
   }
 
   // Create an object of battleships
-  // const boats = {'Carrier': 5, 'Battleship': 4, 'Cruiser': 3, 'Submarine': 3, 'Destroyer': 2};
   const boatArray = [5,4,3,3,2];
   console.log(boatArray);
-
 
   // Create function that randomly assigns where battleship should be in an array
   const $board1 = $('.board1');
   const $board2 = $('.board2');
   let num;
-  let first = true;
   const width = 10;
 
   function randomNumber() {
     return num = parseInt(Math.random() * $board1.length);
   }
 
-  function direction() {
-    // const direction = parseInt(Math.random() * 2);
-    const directionArray = [parseInt(Math.random() * 2), parseInt(Math.random() * 2), parseInt(Math.random() * 2), parseInt(Math.random() * 2), parseInt(Math.random() * 2), parseInt(Math.random() * 2), parseInt(Math.random() * 2), parseInt(Math.random() * 2), parseInt(Math.random() * 2), parseInt(Math.random() * 2)];
-    console.log(directionArray);
-    directionArray[0] === 0 ? assignCarrierX() : assignCarrierY(); // board 1
-    if (directionArray[1] === 0) { // board 2
-      assignCarrierX();
-      first = true;
-    } else {
-      assignCarrierY();
-      first = true;
-    }
-    directionArray[2] === 0 ? assignBattleshipX() : assignBattleshipY(); // board 1
-    if (directionArray[3] === 0) { // board 2
-      assignBattleshipX();
-      first = true;
-    } else {
-      assignBattleshipY();
-      first = true;
-    }
-    directionArray[4] === 0 ? assignSubCruiseX() : assignSubCruiseY(); // board 1
-    if (directionArray[5] === 0) { // board 2
-      assignSubCruiseX();
-      first = true;
-    } else {
-      assignSubCruiseY();
-      first = true;
-    }
-    directionArray[6] === 0 ? assignSubCruiseX() : assignSubCruiseY(); // board 1
-    if (directionArray[7] === 0) { // board 2
-      assignSubCruiseX();
-      first = true;
-    } else {
-      assignSubCruiseY();
-      first = true;
-    }
-    directionArray[8] === 0 ? assignDestroyerX() : assignDestroyerY(); // board 1
-    if (directionArray[9] === 0) { // board 2
-      assignDestroyerX();
-      first = true;
-    } else {
-      assignDestroyerY();
-      first = true;
-    }
-  }
+  function placeShips
 
-  // create variable for either board 1 or board 2
-  let tile;
-  let tile1x;
-  let tile2x;
-  let tile3x;
-  let tile4x;
-  let tile1y;
-  let tile2y;
-  let tile3y;
-  let tile4y;
-  let $board;
 
-  function chooseBoard() {
-    $board = first ? $board1 : $board2;
-    tile = $board.eq(num);
-    tile1x = $board.eq(num + 1);
-    tile2x = $board.eq(num + 2);
-    tile3x = $board.eq(num + 3);
-    tile4x = $board.eq(num + 4);
-    tile1y = $board.eq(num + width);
-    tile2y = $board.eq(num + (width * 2));
-    tile3y = $board.eq(num + (width * 3));
-    tile4y = $board.eq(num + (width * 4));
-  }
 
   function ship() {
-    $board1.hasClass('ship');
+    $board.hasClass('ship');
   }
 
-  let orientation;
+  let orientation = '';
 
   function decideOrientation() {
     const direction = parseInt(Math.random() * 2);
@@ -115,211 +45,231 @@ $(() => {
     }
   }
 
-  function assignCarrier(orientation) {
+  function placeShips() {
+    for (let i = 0; i < boatArray.length; i++) {
+      placeShip(boatArray[i]);
+    }
+  }
+
+  const edgeCheck = [0, width - 1, width - 2, width - 3];
+
+  function placeShip(shipLength) {
     decideOrientation();
     randomNumber();
     const checkLeftTileHitEdge = (num + 1) % width;
     chooseBoard();
-    if(orientation === 'x') {
-      if ($board.splice(num, boatArray[0]).filter(ship).length !== 0) {
-        if (checkLeftTileHitEdge === 0 || checkLeftTileHitEdge === width - 1 || checkLeftTileHitEdge === width - 2 || checkLeftTileHitEdge === width - 3) {
-          return assignCarrier();
+    const ifEdge = edgeCheck.slice(0, shipLength).some((item) => {
+      return checkLeftTileHitEdge === item;
+    });
+    const ifOver = Ytiles.slice(0, shipLength).some((item) => {
+      return item.length === 0;
+    });
+    const containsShipClass = Ytiles.slice(0, 5).some((item) => {
+      return item.hasClass('ship') !== true;
+    });
+    if (orientation === 'x') {
+      if ($board.slice(num, (num + shipLength + 1)).filter(ship).length === 0) {
+        if (ifEdge) {
+          placeShip(shipLength);
         } else {
-          tile.addClass('ship');
-          tile1x.addClass('ship');
-          tile2x.addClass('ship');
-          tile3x.addClass('ship');
-          tile4x.addClass('ship');
+          $.each(Xtiles.slice(0, shipLength), (index, element) => {
+            $(element).addClass('ship');
+            console.log(index, element);
+          });
+          // first = false;
         }
       } else {
-        return assignCarrier();
+        placeShip(i);
       }
     } else {
-      if ($board.splice(num, boatArray[0]).filter(ship).length !== 0) {
-        if (tile1y.length === 0 || tile2y.length === 0 || tile3y.length === 0 || tile4y.length === 0) {
-          return assignCarrier();
+      if (containsShipClass) {
+        if (ifOver) {
+          placeShip(i);
         } else {
-          tile.addClass('ship');
-          tile1y.addClass('ship');
-          tile2y.addClass('ship');
-          tile3y.addClass('ship');
-          tile4y.addClass('ship');
+          $.each(Ytiles.slice(0, shipLength), (index, element) => {
+            $(element).addClass('ship');
+            console.log(index, element);
+          });
+          // first = false;
         }
       } else {
-        return assignCarrier();
+        placeShip(i);
       }
     }
   }
 
-  // Function to assign CARRIER HORIZONTALLY
-  function assignCarrierX() {
-    randomNumber();
-    const indexPlus = (num + 1) % width;
-    chooseBoard();
-    if (!tile.hasClass('ship')) {
-      if (indexPlus === 0 || indexPlus === width - 1 || indexPlus === width - 2 || indexPlus === width - 3) {
-        return assignCarrierX();
-      } else if (!(tile1x.hasClass('ship') || tile2x.hasClass('ship') || tile3x.hasClass('ship') || tile4x.hasClass('ship'))) {
-        tile.addClass('ship');
-        tile1x.addClass('ship');
-        tile2x.addClass('ship');
-        tile3x.addClass('ship');
-        tile4x.addClass('ship');
-        first = false;
-      } else {
-        return assignCarrierX();
-      }
-    } else {
-      return assignCarrierX();
-    }
-  }
+  // function assignCarrier() {
+  //   decideOrientation();
+  //   randomNumber();
+  //   const checkLeftTileHitEdge = (num + 1) % width;
+  //   chooseBoard();
+  //   const ifEdge = edgeCheck.slice(0, 5).some((item) => {
+  //     return checkLeftTileHitEdge === item;
+  //   });
+  //   const ifOver = Ytiles.slice(0, 5).some((item) => {
+  //     return item.length === 0;
+  //   });
+  //   const containsShipClass = Ytiles.slice(0, 5).some((item) => {
+  //     return !item.hasClass('ship');
+  //   });
+  //   if (orientation === 'x') {
+  //     if ($board.slice(num, (num + 6)).filter(ship).length === 0) {
+  //       if (ifEdge) {
+  //         return assignCarrier();
+  //       } else {
+  //         $.each(Xtiles.slice(0, 5), (index, element) => {
+  //           $(element).addClass('ship');
+  //           console.log(index, element);
+  //         });
+  //         // tile.addClass('ship');
+  //         // tile1x.addClass('ship');
+  //         // tile2x.addClass('ship');
+  //         // tile3x.addClass('ship');
+  //         // tile4x.addClass('ship');
+  //         first = false;
+  //       }
+  //     } else {
+  //       return assignCarrier();
+  //     }
+  //   } else {
+  //     if (!tile.hasClass('ship') || tile1y.hasClass('ship') || tile2y.hasClass('ship') || tile3y.hasClass('ship')) {
+  //       if (ifOver) {
+  //         return assignCarrier();
+  //       } else {
+  //         tile.addClass('ship');
+  //         tile1y.addClass('ship');
+  //         tile2y.addClass('ship');
+  //         tile3y.addClass('ship');
+  //         tile4y.addClass('ship');
+  //         first = false;
+  //       }
+  //     } else {
+  //       return assignCarrier();
+  //     }
+  //   }
+  // }
 
-  // Function to assign CARRIER VERTICALLY
-  function assignCarrierY() {
-    randomNumber();
-    chooseBoard();
-    if (!tile.hasClass('ship')) {
-      if (tile1y.length === 0 || tile2y.length === 0 || tile3y.length === 0 || tile4y.length === 0) {
-        return assignCarrierY();
-      } else if (!(tile1y.hasClass('ship') || tile2y.hasClass('ship') || tile3y.hasClass('ship') || tile4y.hasClass('ship'))) {
-        tile.addClass('ship');
-        tile1y.addClass('ship');
-        tile2y.addClass('ship');
-        tile3y.addClass('ship');
-        tile4y.addClass('ship');
-        first = false;
-      } else {
-        return assignCarrierY();
-      }
-    } else {
-      return assignCarrierY();
-    }
-  }
+  // function assignBattleship(orientation) {
+  //   decideOrientation();
+  //   randomNumber();
+  //   const checkLeftTileHitEdge = (num + 1) % width;
+  //   chooseBoard();
+  //   if(orientation === 'x') {
+  //     if (!tile.hasClass('ship')) {
+  //       if (!tile.hasClass('ship')) {
+  //         if (checkLeftTileHitEdge === 0 || checkLeftTileHitEdge === width - 1 || checkLeftTileHitEdge === width - 2) {
+  //           return assignBattleship();
+  //         } else if (!(tile1x.hasClass('ship') || tile2x.hasClass('ship') || tile3x.hasClass('ship'))) {
+  //           tile.addClass('ship');
+  //           tile1x.addClass('ship');
+  //           tile2x.addClass('ship');
+  //           tile3x.addClass('ship');
+  //           first = false;
+  //         } else {
+  //           return assignBattleship();
+  //         }
+  //       } else {
+  //         return assignBattleship();
+  //       }
+  //     }
+  //   } else {
+  //     if (!tile.hasClass('ship')) {
+  //       if (tile1y.length === 0 || tile2y.length === 0 || tile3y.length === 0) {
+  //         return assignBattleship();
+  //       } else if (!(tile1y.hasClass('ship') || tile2y.hasClass('ship') || tile3y.hasClass('ship'))) {
+  //         tile.addClass('ship');
+  //         tile1y.addClass('ship');
+  //         tile2y.addClass('ship');
+  //         tile3y.addClass('ship');
+  //         first = false;
+  //       } else {
+  //         return assignBattleship();
+  //       }
+  //     } else {
+  //       return assignBattleship();
+  //     }
+  //   }
+  // }
+  //
+  // function assignSub(orientation) {
+  //   decideOrientation();
+  //   randomNumber();
+  //   const checkLeftTileHitEdge = (num + 1) % width;
+  //   chooseBoard();
+  //   if(orientation === 'x') {
+  //     if (!tile.hasClass('ship')) {
+  //       if (!tile.hasClass('ship')) {
+  //         if (checkLeftTileHitEdge === 0 || checkLeftTileHitEdge === width - 1) {
+  //           return assignSub();
+  //         } else if (!(tile1x.hasClass('ship') || tile2x.hasClass('ship'))) {
+  //           tile.addClass('ship');
+  //           tile1x.addClass('ship');
+  //           tile2x.addClass('ship');
+  //           first = false;
+  //         } else {
+  //           return assignSub();
+  //         }
+  //       } else {
+  //         return assignSub();
+  //       }
+  //     }
+  //   } else {
+  //     if (!tile.hasClass('ship')) {
+  //       if (tile1y.length === 0 || tile2y.length === 0) {
+  //         return assignSub();
+  //       } else if (!(tile1y.hasClass('ship') || tile2y.hasClass('ship'))) {
+  //         tile.addClass('ship');
+  //         tile1y.addClass('ship');
+  //         tile2y.addClass('ship');
+  //         first = false;
+  //       } else {
+  //         return assignSub();
+  //       }
+  //     } else {
+  //       return assignSub();
+  //     }
+  //   }
+  // }
+  //
+  // // Function to assign DESTROYER
+  // function assignDestroyer(orientation) {
+  //   decideOrientation();
+  //   randomNumber();
+  //   const checkLeftTileHitEdge = (num + 1) % width;
+  //   chooseBoard();
+  //   if(orientation === 'x') {
+  //     if (!tile.hasClass('ship')) {
+  //       if (!tile.hasClass('ship')) {
+  //         if (checkLeftTileHitEdge === 0) {
+  //           return assignDestroyer();
+  //         } else if (!(tile1x.hasClass('ship'))) {
+  //           tile.addClass('ship');
+  //           tile1x.addClass('ship');
+  //           first = false;
+  //         } else {
+  //           return assignDestroyer();
+  //         }
+  //       } else {
+  //         return assignDestroyer();
+  //       }
+  //     }
+  //   } else {
+  //     if (!tile.hasClass('ship')) {
+  //       if (tile1y.length === 0 || tile2y.length === 0) {
+  //         return assignDestroyer();
+  //       } else if (!(tile1y.hasClass('ship'))) {
+  //         tile.addClass('ship');
+  //         tile1y.addClass('ship');
+  //         first = false;
+  //       } else {
+  //         return assignDestroyer();
+  //       }
+  //     } else {
+  //       return assignDestroyer();
+  //     }
+  //   }
+  // }
 
-  // Function to assign BATTLESHIPS HORIZONTALLY
-  function assignBattleshipX() {
-    randomNumber();
-    const indexPlus = (num + 1) % width;
-    chooseBoard();
-    if (!tile.hasClass('ship')) {
-      if (indexPlus === 0 || indexPlus === width - 1 || indexPlus === width - 2) {
-        return assignBattleshipX();
-      } else if (!(tile1x.hasClass('ship') || tile2x.hasClass('ship') || tile3x.hasClass('ship'))) {
-        tile.addClass('ship');
-        tile1x.addClass('ship');
-        tile2x.addClass('ship');
-        tile3x.addClass('ship');
-        first = false;
-      } else {
-        return assignBattleshipX();
-      }
-    } else {
-      return assignBattleshipX();
-    }
-  }
-
-  // Function to assign BATTLESHIPS VERTICALLY
-  function assignBattleshipY() {
-    randomNumber();
-    chooseBoard();
-    if (!tile.hasClass('ship')) {
-      if (tile1y.length === 0 || tile2y.length === 0 || tile3y.length === 0) {
-        return assignBattleshipY();
-      } else if (!(tile1y.hasClass('ship') || tile2y.hasClass('ship') || tile3y.hasClass('ship'))) {
-        tile.addClass('ship');
-        tile1y.addClass('ship');
-        tile2y.addClass('ship');
-        tile3y.addClass('ship');
-        first = false;
-      } else {
-        return assignBattleshipY();
-      }
-    } else {
-      return assignBattleshipY();
-    }
-  }
-
-  // Function to assign SUB/CRUISER HORIZONTALLY
-  function assignSubCruiseX() {
-    randomNumber();
-    const indexPlus = (num + 1) % width;
-    chooseBoard();
-    if (!tile.hasClass('ship')) {
-      if (indexPlus === 0 || indexPlus === width - 1) {
-        return assignSubCruiseX();
-      } else if (!(tile1x.hasClass('ship') || tile2x.hasClass('ship'))) {
-        console.log('subCruiseX', tile.attr('class'), tile1x.attr('class'), tile2x.attr('class'));
-        tile.addClass('ship');
-        tile1x.addClass('ship');
-        tile2x.addClass('ship');
-        first = false;
-      } else {
-        return assignSubCruiseX();
-      }
-    } else {
-      return assignSubCruiseX();
-    }
-  }
-
-  // Function to assign SUB/CRUISER VERTICALLY
-  function assignSubCruiseY() {
-    randomNumber();
-    chooseBoard();
-    if (!tile.hasClass('ship')) {
-      if (tile1y.length === 0 || tile2y.length === 0) {
-        return assignSubCruiseY();
-      } else if (!(tile1y.hasClass('ship') || tile2y.hasClass('ship'))) {
-        console.log('subCruiseY', tile.attr('class'), tile1y.attr('class'), tile2y.attr('class'));
-        tile.addClass('ship');
-        tile1y.addClass('ship');
-        tile2y.addClass('ship');
-        first = false;
-      } else {
-        return assignSubCruiseY();
-      }
-    } else {
-      return assignSubCruiseY();
-    }
-  }
-
-  // Function to assign DESTROYER HORIZONTALLY
-  function assignDestroyerX() {
-    randomNumber();
-    const indexPlus = (num + 1) % width;
-    chooseBoard();
-    if (!tile.hasClass('ship')) {
-      if (indexPlus === 0) {
-        return assignDestroyerX();
-      } else if (!(tile1x.hasClass('ship'))) {
-        tile.addClass('ship');
-        tile1x.addClass('ship');
-        first = false;
-      } else {
-        return assignDestroyerX();
-      }
-    } else {
-      return assignDestroyerX();
-    }
-  }
-
-  // Function to assign DESTROYER VERTICALLY
-  function assignDestroyerY() {
-    randomNumber();
-    chooseBoard();
-    if (!tile.hasClass('ship')) {
-      if (tile1y.length === 0) {
-        return assignDestroyerY();
-      } else if (!(tile1y.hasClass('ship'))) {
-        tile.addClass('ship');
-        tile1y.addClass('ship');
-        first = false;
-      } else {
-        return assignDestroyerY();
-      }
-    } else {
-      return assignDestroyerY();
-    }
-  }
 
   // Assign a 'miss'/'hit' background-color/X to the tile that has been clicked
   $board2.on('click', (e) => {
@@ -352,7 +302,8 @@ $(() => {
     $boardOne.show();
     $boardTwo.show();
     $result.hide();
-    assignCarrier();
+    placeShips();
+
     $playButton.html('Play Again ?');
   });
 
