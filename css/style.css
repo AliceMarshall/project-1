@@ -14,12 +14,13 @@ main {
 
 #title {
   margin: 0 auto;
+  height: 150px;
 }
 
 button {
   margin: 0 auto;
   background-color: slategrey;
-  border: none;
+  border-radius: 5px;
   color: white;
   padding: 15px 32px;
   text-align: center;
@@ -30,6 +31,7 @@ button {
   font-family: 'Rubik Mono One', sans-serif;
   outline: none;
   outline-color: none;
+  width: 250px
 }
 
 .boardOne {
@@ -84,7 +86,7 @@ button {
   font-size: 16px;
   height: 29px;
   padding: 5px;
-  width: 150px;
+  width: 180px;
   outline: none;
 }
 

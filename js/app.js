@@ -12,9 +12,8 @@ $(() => {
     $boardTwo.append($(div2));
   }
 
-  // Create an object of battleships
+  // Creates an object of battleships
   const boatsArray = [5,4,3,3,2];
-  console.log(boatsArray);
 
   // Create function that randomly assigns where battleship should be in an array
   const $board1 = $('.board1');
@@ -22,14 +21,16 @@ $(() => {
   const width = 10;
   let cellIndex = null;
   let $cellsBoard = $('.board1');
-  console.log($cellsBoard);
   let orientation = 'x';
+  let computer = true;
+  const $assign = $('.assign');
+  $assign.hide();
 
   function changeBoard() {
-    if($cellsBoard.hasClass('board1')) {
-      return $cellsBoard = $('.board2');
-    } else {
+    if($cellsBoard.hasClass('board2')) {
       return $cellsBoard = $('.board1');
+    } else {
+      return $cellsBoard = $('.board2');
     }
   }
 
@@ -48,21 +49,43 @@ $(() => {
       orientation = 'x';
       $spanOrientation.html('horizontal');
     }
-    console.log(orientation);
   });
 
+  // Function that links to what option is in the selection box
+  const boats = {'Carrier': 5, 'Battleship': 4, 'Submarine': 3, 'Cruiser': 3, 'Destroyer': 2};
+  const $select = $('select');
+  let selection = null;
+  const $tryAgain = $('.try-again');
+  $tryAgain.hide();
 
-  // function playerAssignsShip() {
-  //
-  // }
+  function tryAgain() {
+    $tryAgain.show();
+    setTimeout(function() {
+      $tryAgain.hide();
+    }, 2000);
+  }
+
+  $board1.on('click', (e) => {
+    selection = $select.val();
+    const length = boats[selection];
+    const cellIndex = $board1.index($(e.target));
+    placeShips(length, orientation, cellIndex);
+  });
 
   function placeShips(length, orientation, cellIndex) {
-    orientation = parseInt(Math.random() * 2) === 0 ? 'x' : 'y';
-    cellIndex = Math.floor(Math.random() * $cellsBoard.length);
+    if (computer) {
+      orientation = parseInt(Math.random() * 2) === 0 ? 'x' : 'y';
+      cellIndex = Math.floor(Math.random() * $cellsBoard.length);
+    }
     const $cell = $cellsBoard.eq(cellIndex);
 
     if ($cell.hasClass('ship')) {
-      return placeShips(length);
+      if (computer) {
+        return placeShips(length, orientation, cellIndex);
+      } else {
+        tryAgain();
+        return false;
+      }
     }
 
     let canPlaceShip = false;
@@ -70,9 +93,13 @@ $(() => {
 
     if (orientation === 'x') {
       if ((cellIndex + length - 1) % width < length - 1) {
-        return placeShips(length);
+        if (computer) {
+          return placeShips(length, orientation, cellIndex);
+        } else {
+          tryAgain();
+          return false;
+        }
       }
-
       $shipsCells = $cellsBoard.slice(cellIndex, cellIndex + length);
     } else {
       const cellIndices = [];
@@ -81,7 +108,12 @@ $(() => {
       }
 
       if (cellIndices[cellIndices.length - 1] > (allCells - 1)) {
-        return placeShips(length);
+        if (computer) {
+          return placeShips(length, orientation, cellIndex);
+        } else {
+          tryAgain();
+          return false;
+        }
       }
 
       $shipsCells = $cellsBoard.filter((i) => {
@@ -90,14 +122,22 @@ $(() => {
     }
 
     canPlaceShip = $shipsCells.toArray().every((cell) => {
-      console.log($(cell), $(cell).hasClass('ship'));
       return !$(cell).hasClass('ship');
     });
 
     if (!canPlaceShip) {
-      return placeShips(length);
+      if (computer) {
+        return placeShips(length, orientation, cellIndex);
+      } else {
+        tryAgain();
+        return false;
+      }
     }
     $shipsCells.addClass('ship');
+    if (!computer) {
+      $('option:selected').prop('disabled', true);
+      $('option').eq(0).prop('selected', true);
+    }
   }
 
   // Assign a 'miss'/'hit' background-color/X to the tile that has been clicked
@@ -127,13 +167,18 @@ $(() => {
   }
   // Function for .on click Play Game
   $playButton.on('click', () => {
+    $assign.show();
+    changeBoard();
+    computer = true;
     clearClasses();
     $boardOne.show();
     $boardTwo.show();
     $result.hide();
-    boatsArray.forEach((length) => placeShips(length));
+    boatsArray.forEach((length, orientation, cellIndex) => placeShips(length, orientation, cellIndex));
     changeBoard();
-    boatsArray.forEach((length) => placeShips(length));
+    computer = false;
+    $('option').prop('disabled', false);
+    $('option:selected').prop('disabled', true);
     $playButton.html('Play Again ?');
   });
 
@@ -183,6 +228,34 @@ $(() => {
       gameBoard.addClass('miss');
     }
     winLoseCheck();
+  }
+
+  // check if you sunk a whole ship every time someone clicks
+
+  let countPlayer;
+  let countComp;
+
+  function add(a, b) {
+    return a + b;
+  }
+
+  function winLoseCheck() {
+    countPlayer = $('.board2.hit').length;
+    countComp = $('.board1.hit').length;
+    for (i = 0; i < $board2.length; i++) {
+      if (countPlayer === boatsArray.reduce(add, 0)) {
+        $boardOne.hide();
+        $boardTwo.hide();
+        $result.html(`YOU SUNK MY BATTLESHIPS!`);
+        $result.show();
+      }
+      if (countComp === boatsArray.reduce(add, 0)) {
+        $boardOne.hide();
+        $boardTwo.hide();
+        $result.html(`I SUNK YOUR BATTLESHIPS!`);
+        $result.show();
+      }
+    }
   }
 
   // inside function above it also needs to be smart and when a hit is made it checks all squares adjacent
@@ -289,40 +362,6 @@ $(() => {
   //     computersGo();
   //   }
   // }
-
-
-
-
-
-
-
-  // check if you sunk a whole ship every time someone clicks
-
-  let countPlayer;
-  let countComp;
-
-  function add(a, b) {
-    return a + b;
-  }
-
-  function winLoseCheck() {
-    countPlayer = $('.board2.hit').length;
-    countComp = $('.board1.hit').length;
-    for (i = 0; i < $board2.length; i++) {
-      if (countPlayer === boatsArray.reduce(add, 0)) {
-        $boardOne.hide();
-        $boardTwo.hide();
-        $result.html(`YOU SUNK MY BATTLESHIPS!`);
-        $result.show();
-      }
-      if (countComp === boatsArray.reduce(add, 0)) {
-        $boardOne.hide();
-        $boardTwo.hide();
-        $result.html(`I SUNK YOUR BATTLESHIPS!`);
-        $result.show();
-      }
-    }
-  }
 
   // create an animation for when you hit a ship
 
