@@ -13,6 +13,20 @@
     <main>
     <img src="images/title.png" alt="Battleship Logo" id="title">
     <button type="button" class="play-button">Play Game</button>
+    <button type="button" class="instructions-button">Instructions</button>
+    <div class="instructions">
+      <ol>
+        <li>Ships can only be placed horizontally or vertically across grid spaces, and can't hang over the outer grid boundary. It will return 'Try Again'</li>
+        <li>Ships are not allowed to share a space with another ship.</li>
+        <li>The left board is your board to place ships into.</li>
+        <li>When you have placed all ships, you will be directed to 'Start Game !'</li>
+        <li>When you 'miss' or 'hit' a ship, the square will appear white or red respectively, and alert you below.</li>
+        <!-- <li>When all of the squares of a ship have been hit, the ship is sunk.</li> -->
+        <!-- <li>Players must announce to their opponent each time one of their ships is sunk. (Example: "You sunk my Battleship!")</li> -->
+        <li>The winner is the first player to sink their opponent's ships before all of their own are sunk.</li>
+      </ol>
+
+    </div>
     <br><br>
     <div class="boardOne">
     </div>
@@ -33,9 +47,9 @@
         </form>
       </div>
       <div class="ship-assign">Orientation : <span>horizontal</span></div>
-      <div class="try-again">Try Again</div>
       <button type="button" class="rotate">Rotate</button>
     </div>
+    <div class="alert-player">Try Again</div>
     <div class="result"></div>
     <div class="instant-result"></div>
   </main>

@@ -12,7 +12,36 @@ $(() => {
     $boardTwo.append($(div2));
   }
 
-  // Creates an object of battleships
+  // Create instructions toggle
+  // const $instructionsButton = $('.instructions-button');
+  const $instructions = $('.instructions');
+  $instructions.hide();
+  // let playing = 1;
+
+  // $instructionsButton.on('click', () => {
+  //   if (playing === 1) {
+  //     $boardOne.toggle();
+  //     $boardTwo.toggle();
+  //     $instructions.toggle();
+  //     $playButton.prop('disabled', true);
+  //   } else if (playing === 2) {
+  //     $boardOne.toggle();
+  //     $boardTwo.toggle();
+  //     $assign.toggle();
+  //     $instructions.toggle();
+  //   } else if (playing === 3) {
+  //     $boardOne.toggle();
+  //     $boardTwo.toggle();
+  //     $alertPlayer.toggle();
+  //     $instructions.toggle();
+  //   } else {
+  //     $result.toggle();
+  //     $instructions.toggle();
+  //   }
+  // });
+
+  // Creates an object and array of battleships
+  const boats = {'Carrier': 5, 'Battleship': 4, 'Submarine': 3, 'Cruiser': 3, 'Destroyer': 2};
   const boatsArray = [5,4,3,3,2];
 
   // Create function that randomly assigns where battleship should be in an array
@@ -52,17 +81,29 @@ $(() => {
   });
 
   // Function that links to what option is in the selection box
-  const boats = {'Carrier': 5, 'Battleship': 4, 'Submarine': 3, 'Cruiser': 3, 'Destroyer': 2};
+
   const $select = $('select');
   let selection = null;
-  const $tryAgain = $('.try-again');
-  $tryAgain.hide();
+  const $alertPlayer = $('.alert-player');
+  $alertPlayer.hide();
 
   function tryAgain() {
-    $tryAgain.show();
+    $alertPlayer.fadeIn();
+    $assign.hide();
     setTimeout(function() {
-      $tryAgain.hide();
-    }, 2000);
+      $alertPlayer.hide();
+      $assign.show();
+    }, 1000);
+  }
+
+  function hideAssignShips() {
+    const $shipsOnBoard = $('.board1.ship');
+    if ($shipsOnBoard.length === 17) {
+      $assign.hide();
+      $alertPlayer.text('Start Game !');
+      $alertPlayer.show();
+      // playing = 3;
+    }
   }
 
   $board1.on('click', (e) => {
@@ -137,21 +178,9 @@ $(() => {
     if (!computer) {
       $('option:selected').prop('disabled', true);
       $('option').eq(0).prop('selected', true);
+      hideAssignShips();
     }
   }
-
-  // Assign a 'miss'/'hit' background-color/X to the tile that has been clicked
-  $board2.on('click', (e) => {
-    const clicked = $(e.target);
-    if (clicked.hasClass('ship')) {
-      clicked.addClass('hit');
-
-      computersGo();
-    } else {
-      clicked.addClass('miss');
-      computersGo();
-    }
-  });
 
   // Create a click function that initiates boards and the game.
 
@@ -167,6 +196,8 @@ $(() => {
   }
   // Function for .on click Play Game
   $playButton.on('click', () => {
+    // playing = 2;
+    $alertPlayer.hide();
     $assign.show();
     changeBoard();
     computer = true;
@@ -182,15 +213,27 @@ $(() => {
     $playButton.html('Play Again ?');
   });
 
+  // Assign a 'miss'/'hit' background-color/X to the tile that has been clicked
+  $board2.on('click', (e) => {
+    const clicked = $(e.target);
+    if (clicked.hasClass('ship')) {
+      clicked.addClass('hit');
+      $alertPlayer.text('Hit !');
+      computersGo();
+    } else {
+      clicked.addClass('miss');
+      $alertPlayer.text('Miss !');
+      computersGo();
+    }
+  });
+
   // create a function that when you click on the board the computer also randomly clicks on the other board, and follow the same hit or miss principles
   let x;
   let y;
   let coordObj;
-  // let attackMode = false;
-  // let hitX = 1;
-  // let hitY = 1;
-  // let index;
-  // let hitIndex;
+  let attackMode = false;
+  let hitX = 1;
+  let hitY = 1;
 
   function makeCoords() {
     coordObj = {};
@@ -211,22 +254,26 @@ $(() => {
   function computersGo() {
     randomNumber();
     const gameBoard = $board1.eq(cellIndex);
-    if (gameBoard.hasClass('ship')) {
-      gameBoard.removeClass('ship');
-      gameBoard.addClass('hit');
-      // attackMode = true;
-      // hitX = coordObj[num][0];
-      // console.log(hitX);
-      // hitY = coordObj[num][1];
-      // console.log(hitY);
-      // hitIndex = num;
-    } else if (gameBoard.hasClass('hit')) {
-      computersGo();
-    } else if (gameBoard.hasClass('miss')) {
-      computersGo();
+    if (attackMode) {
+      attackGo();
     } else {
-      gameBoard.addClass('miss');
+      if (gameBoard.hasClass('ship')) {
+        gameBoard.removeClass('ship');
+        gameBoard.addClass('hit');
+        attackMode = true;
+        hitX = coordObj[cellIndex][0];
+        // console.log(hitX);
+        hitY = coordObj[cellIndex][1];
+        // console.log(hitY);
+      } else if (gameBoard.hasClass('hit')) {
+        computersGo();
+      } else if (gameBoard.hasClass('miss')) {
+        computersGo();
+      } else {
+        gameBoard.addClass('miss');
+      }
     }
+
     winLoseCheck();
   }
 
@@ -246,73 +293,118 @@ $(() => {
       if (countPlayer === boatsArray.reduce(add, 0)) {
         $boardOne.hide();
         $boardTwo.hide();
+        $alertPlayer.hide();
         $result.html(`YOU SUNK MY BATTLESHIPS!`);
         $result.show();
+        // playing = 4;
+        $assign.hide();
       }
       if (countComp === boatsArray.reduce(add, 0)) {
         $boardOne.hide();
         $boardTwo.hide();
+        $alertPlayer.hide();
         $result.html(`I SUNK YOUR BATTLESHIPS!`);
         $result.show();
+        // playing = 4;
+        $assign.hide();
       }
     }
   }
 
-  // inside function above it also needs to be smart and when a hit is made it checks all squares adjacent
+  // Function to shuffle an array.
+  function shuffle(array) {
+    let currentIndex = array.length, temporaryValue, randomIndex;
+  // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+    // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+    return array;
+  }
 
-  // let move = 1;
-  // const ind1 = hitIndex + 1;
-  // const index1 = $board1.eq(ind1);
-  // const index2 = $board1.eq(index - 1);
-  // const index3 = $board1.eq(index + width);
-  // const index4 = $board1.eq(index - width);
-  //
-  //
-  // function attackGo() {
-  //   if (move === 1) {
-  //     rightMove();
-  //   } else if (move === 2) {
-  //     leftMove();
-  //   } else if (move === 3) {
-  //     downMove();
-  //   } else if (move === 4) {
-  //     upMove();
-  //   } else {
-  //     attackMode = true;
-  //     computersGo();
-  //   }
-  // }
-  //
-  // function rightMove() {
+  // attackGo function checks cells around the hit randomly
+
+  let newCell = null;
+  const changeIndexObj = {'north': - width, 'east': 1, 'south': width, 'west': - 1};
+  const moves = ['north', 'east', 'south', 'west'];
+
+  function attackGo() {
+    shuffle(moves);
+    const coordCheckObj = {'north': hitY - 1 > 0, 'east': hitX + 1 <= width, 'south': hitY + 1 <= width, 'west': hitX - 1 > 0};
+    let successfulMove = false;
+
+    for (let i = 0; i < Object.keys(coordCheckObj).length; i++) {
+
+      if (coordCheckObj[moves[i]]) {
+        newCell = $board1.eq(cellIndex + changeIndexObj[moves[i]]);
+        console.log(newCell);
+
+        if (newCell.hasClass('ship')) {
+          newCell.removeClass('ship');
+          newCell.addClass('hit');
+          successfulMove = true;
+          cellIndex = cellIndex + changeIndexObj[moves[i]];
+          hitX = coordObj[cellIndex][0];
+          hitY = coordObj[cellIndex][1];
+          break;
+        } else if (newCell.hasClass('hit') || newCell.hasClass('miss')) {
+          console.log('square was hit already or missed already');
+          continue;
+        } else {
+          newCell.addClass('miss');
+          successfulMove = true;
+          attackMode = false;
+          break;
+        }
+
+      }
+    }
+
+    if (!successfulMove) {
+      attackMode = false;
+      computersGo();
+    }
+  }
+
+
+
+
   //   if (hitX + 1 <= width) {
-  //     console.log(index1);
-  //     if (index1.hasClass('ship')) {
-  //       index1.removeClass('ship');
-  //       index1.addClass('hit');
-  //     } else if (index1.hasClass('hit')) {
+  //     newCell = $board1.eq(cellIndex + 1);
+  //     console.log(newCell);
+  //     if (hasShip) {
+  //       removeShip;
+  //       addHit;
+  //     } else if (hasHit) {
   //       leftMove();
-  //     } else if (index1.hasClass('miss')) {
+  //     } else if (hasMiss) {
   //       leftMove();
   //     } else {
-  //       index1.addClass('miss');
+  //       addMiss;
   //       move = 2;
   //     }
   //   } else {
   //     leftMove();
   //   }
-  // }
   //
   // function leftMove() {
   //   if (hitX - 1 > 0) {
-  //     if (index2.hasClass('ship')) {
-  //       index2.removeClass('ship');
-  //       index2.addClass('hit');
-  //     } else if (index2.hasClass('hit')) {
+  //     newCell = $board1.eq(cellIndex - 1);
+  //     console.log(newCell);
+  //     if (hasShip) {
+  //       removeShip;
+  //       addHit;
+  //     } else if (hasHit) {
   //       downMove();
-  //     } else if (index2.hasClass('miss')) {
+  //     } else if (hasMiss) {
   //       downMove();
   //     } else {
-  //       index2.addClass('miss');
+  //       addMiss;
   //       move = 3;
   //     }
   //   } else {
@@ -322,15 +414,17 @@ $(() => {
   //
   // function downMove() {
   //   if (hitY + 1 <= width) {
-  //     if (index3.hasClass('ship')) {
-  //       index3.removeClass('ship');
-  //       index3.addClass('hit');
-  //     } else if (index3.hasClass('hit')) {
+  //     newCell = $board1.eq(cellIndex + width);
+  //     console.log(newCell);
+  //     if (hasShip) {
+  //       removeShip;
+  //       addHit;
+  //     } else if (hasHit) {
   //       upMove();
-  //     } else if (index3.hasClass('miss')) {
+  //     } else if (hasMiss) {
   //       upMove();
   //     } else {
-  //       index3.addClass('miss');
+  //       addMiss;
   //       move = 4;
   //     }
   //   } else {
@@ -340,19 +434,21 @@ $(() => {
   //
   // function upMove() {
   //   if (hitY - 1 > 0) {
-  //     if (index4.hasClass('ship')) {
-  //       index4.removeClass('ship');
-  //       index4.addClass('hit');
+  //     newCell = $board1.eq(cellIndex - width);
+  //     console.log(newCell);
+  //     if (hasShip) {
+  //       removeShip;
+  //       addHit;
   //       move = 1;
-  //     } else if (index4.hasClass('hit')) {
+  //     } else if (hasHit) {
   //       attackMode = false;
   //       computersGo();
-  //     } else if (index4.hasClass('miss')) {
+  //     } else if (hasMiss) {
   //       attackMode = false;
   //       move = 1;
   //       computersGo();
   //     } else {
-  //       index4.addClass('miss');
+  //       addMiss;
   //       move = 1;
   //       attackMode = false;
   //     }
@@ -368,8 +464,6 @@ $(() => {
   // write instructions
 
   // create tally
-
-  // change to play game to reset after first click.
 
   // create a function to add your own battleships to the grid.
 
