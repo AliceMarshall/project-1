@@ -18,47 +18,74 @@ main {
 
 button {
   margin: 0 auto;
-  background-color: lightblue;
+  background-color: slategrey;
   border: none;
-  color: black;
+  color: white;
   padding: 15px 32px;
   text-align: center;
   text-decoration: none;
   display: block;
   font-size: 16px;
-  font-weight: bold;
+  font-weight: 200;
   font-family: 'Rubik Mono One', sans-serif;
+  outline: none;
+  outline-color: none;
 }
 
 .boardOne {
-  width: 500px;
+  width: 460px;
   display: inline-block;
 }
 
 .boardTwo {
-  width: 500px;
+  width: 460px;
   display: inline-block;
 }
 
 .board1 {
-  width: 45px;
-  height: 45px;
-  background-color: dodgerblue;
+  width: 40px;
+  height: 40px;
+  background-color: lightskyblue;
   background-size: cover;
   display: inline-block;
   vertical-align: top;
   text-align: center;
-  border: 1px solid black;
+  border: 1px solid white;
 }
 .board2 {
-  width: 45px;
-  height: 45px;
-  background-color: dodgerblue;
+  width: 40px;
+  height: 40px;
+  background-color: lightskyblue;
   background-size: cover;
   display: inline-block;
   vertical-align: top;
   text-align: center;
-  border: 1px solid black;
+  border: 1px solid white;
+}
+
+.assign {
+  display: inline;
+}
+
+.ship-assign {
+  text-align: left;
+  padding-left: 60px;
+  padding-top: 20px;
+}
+
+.instant-result {
+  float: left;
+}
+
+.select {
+  background: transparent;
+  border: none;
+  font-family: 'Rubik Mono One', sans-serif;
+  font-size: 16px;
+  height: 29px;
+  padding: 5px;
+  width: 150px;
+  outline: none;
 }
 
 .result {

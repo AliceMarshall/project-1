@@ -12,13 +12,30 @@
   <body>
     <main>
     <img src="images/title.png" alt="Battleship Logo" id="title">
-    <button type="button" name="button" class="play-button">Play Game</button>
+    <button type="button" class="play-button">Play Game</button>
     <br><br>
     <div class="boardOne">
     </div>
     <div class="boardTwo">
     </div>
+    <div class="assign">
+      <div class="ship-assign">
+        <form>Place ship :
+          <select class="select">
+            <option selected disabled>Select</option>
+            <option>Carrier</option>
+            <option>Battleship</option>
+            <option>Submarine</option>
+            <option>Cruiser</option>
+            <option>Destroyer</option>
+          </select>
+        </form>
+      </div>
+      <div class="ship-assign">Orientation : <span>horizontal</span></div>
+      <button type="button" class="rotate">Rotate</button>
+    </div>
     <div class="result"></div>
+    <div class="instant-result"></div>
   </main>
   </body>
 </html>

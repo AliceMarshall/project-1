@@ -18,35 +18,48 @@ $(() => {
 
   // Create function that randomly assigns where battleship should be in an array
   const $board1 = $('.board1');
-  console.log($board1);
   const $board2 = $('.board2');
   const width = 10;
   let cellIndex = null;
-  let $board = $('.board1');
-  console.log($board);
-  let orientation = '';
-  //
-  // function chooseBoard() {
-  //   if ($board === $('.board1')) {
-  //     $board = $('.board2');
-  //   } else {
-  //     $board = $('.board1');
-  //   }
-  // }
+  let $cellsBoard = $('.board1');
+  console.log($cellsBoard);
+  let orientation = 'x';
 
-  function randomNumber() {
-    return cellIndex = Math.floor(Math.random() * $board.length);
+  function changeBoard() {
+    if($cellsBoard.hasClass('board1')) {
+      return $cellsBoard = $('.board2');
+    } else {
+      return $cellsBoard = $('.board1');
+    }
   }
 
-  // function decideOrientation() {
-  //   orientation = parseInt(Math.random() * 2) === 0 ? 'x' : 'y';
-  //   console.log(orientation);
+  function randomNumber() {
+    return cellIndex = Math.floor(Math.random() * $cellsBoard.length);
+  }
+
+  // Function on click of rotate changes orientation
+  const $rotate = $('.rotate');
+  const $spanOrientation = $('span');
+  $rotate.on('click', () => {
+    if (orientation === 'x') {
+      orientation = 'y';
+      $spanOrientation.html('vertical');
+    } else {
+      orientation = 'x';
+      $spanOrientation.html('horizontal');
+    }
+    console.log(orientation);
+  });
+
+
+  // function playerAssignsShip() {
+  //
   // }
 
-  function placeShips(length) {
+  function placeShips(length, orientation, cellIndex) {
     orientation = parseInt(Math.random() * 2) === 0 ? 'x' : 'y';
-    cellIndex = Math.floor(Math.random() * $board.length);
-    const $cell = $board.eq(cellIndex);
+    cellIndex = Math.floor(Math.random() * $cellsBoard.length);
+    const $cell = $cellsBoard.eq(cellIndex);
 
     if ($cell.hasClass('ship')) {
       return placeShips(length);
@@ -60,7 +73,7 @@ $(() => {
         return placeShips(length);
       }
 
-      $shipsCells = $board.slice(cellIndex, cellIndex + length);
+      $shipsCells = $cellsBoard.slice(cellIndex, cellIndex + length);
     } else {
       const cellIndices = [];
       for (let i = 0; i < length; i++) {
@@ -71,20 +84,20 @@ $(() => {
         return placeShips(length);
       }
 
-      $shipsCells = $board.filter((i) => {
+      $shipsCells = $cellsBoard.filter((i) => {
         return cellIndices.includes(i);
       });
     }
 
     canPlaceShip = $shipsCells.toArray().every((cell) => {
-      console.log($(cell), $(cell).hasClass('occupied'));
-      return !$(cell).hasClass('occupied');
+      console.log($(cell), $(cell).hasClass('ship'));
+      return !$(cell).hasClass('ship');
     });
 
     if (!canPlaceShip) {
       return placeShips(length);
     }
-    $shipsCells.addClass('occupied').text(length);
+    $shipsCells.addClass('ship');
   }
 
   // Assign a 'miss'/'hit' background-color/X to the tile that has been clicked
@@ -92,6 +105,7 @@ $(() => {
     const clicked = $(e.target);
     if (clicked.hasClass('ship')) {
       clicked.addClass('hit');
+
       computersGo();
     } else {
       clicked.addClass('miss');
@@ -111,19 +125,17 @@ $(() => {
       $board2.attr('class', 'board2');
     }
   }
-
-
+  // Function for .on click Play Game
   $playButton.on('click', () => {
     clearClasses();
     $boardOne.show();
     $boardTwo.show();
     $result.hide();
     boatsArray.forEach((length) => placeShips(length));
+    changeBoard();
+    boatsArray.forEach((length) => placeShips(length));
     $playButton.html('Play Again ?');
   });
-
-  // Create function that checks if whole battleship has the background-color/X if yes, change all background-color to black
-
 
   // create a function that when you click on the board the computer also randomly clicks on the other board, and follow the same hit or miss principles
   let x;
