@@ -13,32 +13,8 @@ $(() => {
   }
 
   // Create instructions toggle
-  // const $instructionsButton = $('.instructions-button');
   const $instructions = $('.instructions');
   $instructions.hide();
-  // let playing = 1;
-
-  // $instructionsButton.on('click', () => {
-  //   if (playing === 1) {
-  //     $boardOne.toggle();
-  //     $boardTwo.toggle();
-  //     $instructions.toggle();
-  //     $playButton.prop('disabled', true);
-  //   } else if (playing === 2) {
-  //     $boardOne.toggle();
-  //     $boardTwo.toggle();
-  //     $assign.toggle();
-  //     $instructions.toggle();
-  //   } else if (playing === 3) {
-  //     $boardOne.toggle();
-  //     $boardTwo.toggle();
-  //     $alertPlayer.toggle();
-  //     $instructions.toggle();
-  //   } else {
-  //     $result.toggle();
-  //     $instructions.toggle();
-  //   }
-  // });
 
   // Creates an object and array of battleships
   const boats = {'Carrier': 5, 'Battleship': 4, 'Submarine': 3, 'Cruiser': 3, 'Destroyer': 2};
@@ -81,7 +57,6 @@ $(() => {
   });
 
   // Function that links to what option is in the selection box
-
   const $select = $('select');
   let selection = null;
   const $alertPlayer = $('.alert-player');
@@ -102,7 +77,6 @@ $(() => {
       $assign.hide();
       $alertPlayer.text('Start Game !');
       $alertPlayer.show();
-      // playing = 3;
     }
   }
 
@@ -112,6 +86,8 @@ $(() => {
     const cellIndex = $board1.index($(e.target));
     placeShips(length, orientation, cellIndex);
   });
+
+  const shipPositions = [];
 
   function placeShips(length, orientation, cellIndex) {
     if (computer) {
@@ -142,10 +118,12 @@ $(() => {
         }
       }
       $shipsCells = $cellsBoard.slice(cellIndex, cellIndex + length);
+
     } else {
       const cellIndices = [];
       for (let i = 0; i < length; i++) {
         cellIndices.push(cellIndex + (i * width));
+        // console.log(cellIndices);
       }
 
       if (cellIndices[cellIndices.length - 1] > (allCells - 1)) {
@@ -174,11 +152,44 @@ $(() => {
         return false;
       }
     }
+
     $shipsCells.addClass('ship');
     if (!computer) {
       $('option:selected').prop('disabled', true);
       $('option').eq(0).prop('selected', true);
       hideAssignShips();
+    } else {
+      shipPositions.push($shipsCells.toArray().map((cell) => {
+        return $(cell).index();
+      }));
+    }
+  }
+
+  // const boatsReverse = {5: 'Carrier', 4: 'Battleship', 3: 'Submarine', 3: 'Cruiser', 2: 'Destroyer'};
+
+  function hitAShip() {
+    // let shipHit = 0;
+    for (let i = 0; i < shipPositions.length; i++) {
+      if ($board2[shipPositions[i][i]].hasClass('hit')) {
+        shipPositions[i].splice(shipPositions[i][i]);
+        if (shipPositions[i].length === 0) {
+          if (i === 0) {
+            alert('You sank the Carrier');
+          }
+          if (i === 1) {
+            alert('You sank the Battleship');
+          }
+          if (i === 2) {
+            alert('You sank the Submarine');
+          }
+          if (i === 3) {
+            alert('You sank the Cruiser');
+          }
+          if (i === 4) {
+            alert('You sank the Destroyer');
+          }
+        }
+      }
     }
   }
 
@@ -206,6 +217,7 @@ $(() => {
     $boardTwo.show();
     $result.hide();
     boatsArray.forEach((length, orientation, cellIndex) => placeShips(length, orientation, cellIndex));
+    console.log('shipPositions', shipPositions);
     changeBoard();
     computer = false;
     $('option').prop('disabled', false);
@@ -225,6 +237,7 @@ $(() => {
       $alertPlayer.text('Miss !');
       computersGo();
     }
+    hitAShip();
   });
 
   // create a function that when you click on the board the computer also randomly clicks on the other board, and follow the same hit or miss principles
@@ -234,6 +247,8 @@ $(() => {
   let attackMode = false;
   let hitX = 1;
   let hitY = 1;
+  // let index;
+  let hitIndex;
 
   function makeCoords() {
     coordObj = {};
@@ -265,6 +280,7 @@ $(() => {
         // console.log(hitX);
         hitY = coordObj[cellIndex][1];
         // console.log(hitY);
+        hitIndex = cellIndex;
       } else if (gameBoard.hasClass('hit')) {
         computersGo();
       } else if (gameBoard.hasClass('miss')) {
@@ -275,6 +291,63 @@ $(() => {
     }
 
     winLoseCheck();
+  }
+
+  // inside function above it also needs to be smart and when a hit is made it checks all squares adjacent
+
+  // let move = 1;
+  let newCell = null;
+  const changeIndexObj = {'north': - width, 'east': 1, 'south': width, 'west': - 1};
+  const moves = ['north', 'east', 'south', 'west'];
+
+  function attackGo() {
+    shuffle(moves);
+    const coordCheckObj = {'north': hitY - 1 > 0, 'east': hitX + 1 <= width, 'south': hitY + 1 <= width, 'west': hitX - 1 > 0};
+    console.log('inside attackGo');
+    let successfulMove = false;
+
+    for (let i = 0; i < Object.keys(coordCheckObj).length; i++) {
+      console.log(hitY, hitY - 1 > 0);
+      console.log('check', coordCheckObj[moves[i]]);
+
+      if (coordCheckObj[moves[i]]) {
+        newCell = $board1.eq(hitIndex + changeIndexObj[moves[i]]);
+        console.log(newCell);
+
+        if (newCell.hasClass('ship')) {
+          newCell.removeClass('ship');
+          newCell.addClass('hit');
+          successfulMove = true;
+          break;
+        } else if (newCell.hasClass('hit') || newCell.hasClass('miss')) {
+          continue;
+        } else {
+          newCell.addClass('miss');
+          successfulMove = true;
+          attackMode = false;
+          break;
+        }
+      }
+    }
+
+    if (!successfulMove) {
+      attackMode = false;
+      computersGo();
+    }
+  }
+  function shuffle(array) {
+    let currentIndex = array.length, temporaryValue, randomIndex;
+  // While there remain elements to shuffle...
+    while (0 !== currentIndex) {
+    // Pick a remaining element...
+      randomIndex = Math.floor(Math.random() * currentIndex);
+      currentIndex -= 1;
+      // And swap it with the current element.
+      temporaryValue = array[currentIndex];
+      array[currentIndex] = array[randomIndex];
+      array[randomIndex] = temporaryValue;
+    }
+    return array;
   }
 
   // check if you sunk a whole ship every time someone clicks
@@ -296,7 +369,6 @@ $(() => {
         $alertPlayer.hide();
         $result.html(`YOU SUNK MY BATTLESHIPS!`);
         $result.show();
-        // playing = 4;
         $assign.hide();
       }
       if (countComp === boatsArray.reduce(add, 0)) {
@@ -305,160 +377,10 @@ $(() => {
         $alertPlayer.hide();
         $result.html(`I SUNK YOUR BATTLESHIPS!`);
         $result.show();
-        // playing = 4;
         $assign.hide();
       }
     }
   }
-
-  // Function to shuffle an array.
-  function shuffle(array) {
-    let currentIndex = array.length, temporaryValue, randomIndex;
-  // While there remain elements to shuffle...
-    while (0 !== currentIndex) {
-    // Pick a remaining element...
-      randomIndex = Math.floor(Math.random() * currentIndex);
-      currentIndex -= 1;
-      // And swap it with the current element.
-      temporaryValue = array[currentIndex];
-      array[currentIndex] = array[randomIndex];
-      array[randomIndex] = temporaryValue;
-    }
-    return array;
-  }
-
-  // attackGo function checks cells around the hit randomly
-
-  let newCell = null;
-  const changeIndexObj = {'north': - width, 'east': 1, 'south': width, 'west': - 1};
-  const moves = ['north', 'east', 'south', 'west'];
-
-  function attackGo() {
-    shuffle(moves);
-    const coordCheckObj = {'north': hitY - 1 > 0, 'east': hitX + 1 <= width, 'south': hitY + 1 <= width, 'west': hitX - 1 > 0};
-    let successfulMove = false;
-
-    for (let i = 0; i < Object.keys(coordCheckObj).length; i++) {
-
-      if (coordCheckObj[moves[i]]) {
-        newCell = $board1.eq(cellIndex + changeIndexObj[moves[i]]);
-        console.log(newCell);
-
-        if (newCell.hasClass('ship')) {
-          newCell.removeClass('ship');
-          newCell.addClass('hit');
-          successfulMove = true;
-          cellIndex = cellIndex + changeIndexObj[moves[i]];
-          hitX = coordObj[cellIndex][0];
-          hitY = coordObj[cellIndex][1];
-          break;
-        } else if (newCell.hasClass('hit') || newCell.hasClass('miss')) {
-          console.log('square was hit already or missed already');
-          continue;
-        } else {
-          newCell.addClass('miss');
-          successfulMove = true;
-          attackMode = false;
-          break;
-        }
-
-      }
-    }
-
-    if (!successfulMove) {
-      attackMode = false;
-      computersGo();
-    }
-  }
-
-
-
-
-  //   if (hitX + 1 <= width) {
-  //     newCell = $board1.eq(cellIndex + 1);
-  //     console.log(newCell);
-  //     if (hasShip) {
-  //       removeShip;
-  //       addHit;
-  //     } else if (hasHit) {
-  //       leftMove();
-  //     } else if (hasMiss) {
-  //       leftMove();
-  //     } else {
-  //       addMiss;
-  //       move = 2;
-  //     }
-  //   } else {
-  //     leftMove();
-  //   }
-  //
-  // function leftMove() {
-  //   if (hitX - 1 > 0) {
-  //     newCell = $board1.eq(cellIndex - 1);
-  //     console.log(newCell);
-  //     if (hasShip) {
-  //       removeShip;
-  //       addHit;
-  //     } else if (hasHit) {
-  //       downMove();
-  //     } else if (hasMiss) {
-  //       downMove();
-  //     } else {
-  //       addMiss;
-  //       move = 3;
-  //     }
-  //   } else {
-  //     downMove();
-  //   }
-  // }
-  //
-  // function downMove() {
-  //   if (hitY + 1 <= width) {
-  //     newCell = $board1.eq(cellIndex + width);
-  //     console.log(newCell);
-  //     if (hasShip) {
-  //       removeShip;
-  //       addHit;
-  //     } else if (hasHit) {
-  //       upMove();
-  //     } else if (hasMiss) {
-  //       upMove();
-  //     } else {
-  //       addMiss;
-  //       move = 4;
-  //     }
-  //   } else {
-  //     upMove();
-  //   }
-  // }
-  //
-  // function upMove() {
-  //   if (hitY - 1 > 0) {
-  //     newCell = $board1.eq(cellIndex - width);
-  //     console.log(newCell);
-  //     if (hasShip) {
-  //       removeShip;
-  //       addHit;
-  //       move = 1;
-  //     } else if (hasHit) {
-  //       attackMode = false;
-  //       computersGo();
-  //     } else if (hasMiss) {
-  //       attackMode = false;
-  //       move = 1;
-  //       computersGo();
-  //     } else {
-  //       addMiss;
-  //       move = 1;
-  //       attackMode = false;
-  //     }
-  //   } else {
-  //     attackMode = false;
-  //     move = 1;
-  //     computersGo();
-  //   }
-  // }
-
   // create an animation for when you hit a ship
 
   // write instructions
