@@ -203,7 +203,7 @@ $(() => {
   }
   function scrollDown() {
     $('html, body').animate({ scrollTop: '1000%' }, 600);
-    setTimeout(scrollUp, 2000);
+    setTimeout(scrollUp, 1500);
   }
 
 
