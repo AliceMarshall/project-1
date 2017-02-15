@@ -170,28 +170,42 @@ $(() => {
   function hitAShip() {
     // let shipHit = 0;
     for (let i = 0; i < shipPositions.length; i++) {
-      if ($board2[shipPositions[i][i]].hasClass('hit')) {
-        shipPositions[i].splice(shipPositions[i][i]);
-        if (shipPositions[i].length === 0) {
-          if (i === 0) {
-            alert('You sank the Carrier');
-          }
-          if (i === 1) {
-            alert('You sank the Battleship');
-          }
-          if (i === 2) {
-            alert('You sank the Submarine');
-          }
-          if (i === 3) {
-            alert('You sank the Cruiser');
-          }
-          if (i === 4) {
-            alert('You sank the Destroyer');
+      for (let j = 0; j < shipPositions[i].length; j++) {
+        if ($board2.eq(shipPositions[i][j]).hasClass('hit')) {
+          shipPositions[i].splice(j, 1);
+          if (shipPositions[i].length === 0) {
+            if (i === 0) {
+              scrollDown();
+            }
+            if (i === 1) {
+              scrollDown();
+            }
+            if (i === 2) {
+              scrollDown();
+            }
+            if (i === 3) {
+              scrollDown();
+            }
+            if (i === 4) {
+              scrollDown();
+            }
           }
         }
       }
     }
   }
+
+  const $answer = $('#answer');
+  console.log($answer);
+
+  function scrollUp() {
+    $('html, body').animate({ scrollTop: '0%' }, 600);
+  }
+  function scrollDown() {
+    $('html, body').animate({ scrollTop: '1000%' }, 600);
+    setTimeout(scrollUp, 2000);
+  }
+
 
   // Create a click function that initiates boards and the game.
 
