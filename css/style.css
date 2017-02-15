@@ -68,14 +68,33 @@ button:hover {
   margin: 0 0 20px 0;
 }
 
+#words-left {
+  float: left;
+  padding-top: 20px;
+  padding-bottom: 10px;
+  padding-left: 40px;
+  display: inline-block;
+}
+
+#words-right {
+  float: right;
+  padding-top: 20px;
+  padding-bottom: 10px;
+  padding-right: 40px;
+  display: inline;
+}
+
 .boardOne {
   width: 460px;
   display: inline-block;
+  margin-top: 15px;
 }
 
 .boardTwo {
   width: 460px;
   display: inline-block;
+  margin-top: 15px;
+
 }
 
 .board1 {
@@ -129,13 +148,18 @@ button:hover {
   color: midnightblue;
   height: 29px;
   padding: 5px;
-  width: 170px;
+  width: 230px;
   outline: none;
+}
+
+span {
+  color: red;
 }
 
 .result {
   font-size: 70px;
-  color: black;
+  color: midnightblue;
+  padding-top: 220px;
   text-align: center;
 }
 
@@ -171,14 +195,42 @@ h2 {
   font-size: 60px;
   max-width: 960px;
 }
-.brad-jen {
+#brad-jen {
   margin: 0 auto;
   display: inline-block;
   text-align: center;
   position: relative;
 }
 
-.brad-jen img {
+#chris-gwyn{
+  margin: 0 auto;
+  display: inline-block;
+  text-align: center;
+  position: relative;
+}
+
+#tom-kat {
+  margin: 0 auto;
+  display: inline-block;
+  text-align: center;
+  position: relative;
+}
+
+#just-brit {
+  margin: 0 auto;
+  display: inline-block;
+  text-align: center;
+  position: relative;
+}
+
+#tay-man {
+  margin: 0 auto;
+  display: inline-block;
+  text-align: center;
+  position: relative;
+}
+
+img {
   margin: 10px -3px;
   text-align: center;
 }

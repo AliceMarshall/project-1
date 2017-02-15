@@ -1,5 +1,17 @@
 $(() => {
 
+  //hide all couple divs
+  const $bradJen = $('#brad-jen');
+  const $chrisGwyn = $('#chris-gwyn');
+  const $tomKat = $('#tom-kat');
+  const $justBrit = $('#just-brit');
+  const $tayMan = $('#tay-man');
+  $bradJen.hide();
+  $chrisGwyn.hide();
+  $tomKat.hide();
+  $justBrit.hide();
+  $tayMan.hide();
+
   // Creates the 10x10 board grids
   const div = '<div class="board1"></div>';
   const div2 = '<div class="board2"></div>';
@@ -87,7 +99,7 @@ $(() => {
     placeShips(length, orientation, cellIndex);
   });
 
-  const shipPositions = [];
+  let shipPositions = [];
 
   function placeShips(length, orientation, cellIndex) {
     if (computer) {
@@ -175,18 +187,23 @@ $(() => {
           shipPositions[i].splice(j, 1);
           if (shipPositions[i].length === 0) {
             if (i === 0) {
+              $bradJen.show();
               scrollDown();
             }
             if (i === 1) {
+              $chrisGwyn.show();
               scrollDown();
             }
             if (i === 2) {
+              $tomKat.show();
               scrollDown();
             }
             if (i === 3) {
+              $justBrit.show();
               scrollDown();
             }
             if (i === 4) {
+              $tayMan.show();
               scrollDown();
             }
           }
@@ -221,7 +238,7 @@ $(() => {
   }
   // Function for .on click Play Game
   $playButton.on('click', () => {
-    // playing = 2;
+    shipPositions = [];
     $alertPlayer.hide();
     $assign.show();
     changeBoard();
@@ -250,6 +267,11 @@ $(() => {
       clicked.addClass('miss');
       $alertPlayer.text('Miss !');
       computersGo();
+      $bradJen.hide();
+      $chrisGwyn.hide();
+      $tomKat.hide();
+      $justBrit.hide();
+      $tayMan.hide();
     }
     hitAShip();
   });
@@ -395,14 +417,4 @@ $(() => {
       }
     }
   }
-  // create an animation for when you hit a ship
-
-  // write instructions
-
-  // create tally
-
-  // create a function to add your own battleships to the grid.
-
-  // make it look pretty
-
 });
