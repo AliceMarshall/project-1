@@ -220,7 +220,7 @@ $(() => {
   }
   function scrollDown() {
     $('html, body').animate({ scrollTop: '1000%' }, 600);
-    setTimeout(scrollUp, 1500);
+    setTimeout(scrollUp, 2000);
   }
 
 
@@ -403,7 +403,7 @@ $(() => {
         $boardOne.hide();
         $boardTwo.hide();
         $alertPlayer.hide();
-        $result.html(`YOU SUNK MY BATTLESHIPS!`);
+        $result.html(`You sunk my DictatorShips!`);
         $result.show();
         $assign.hide();
       }
@@ -411,10 +411,21 @@ $(() => {
         $boardOne.hide();
         $boardTwo.hide();
         $alertPlayer.hide();
-        $result.html(`I SUNK YOUR BATTLESHIPS!`);
+        $result.html(`I sunk my DictatorShips!`);
         $result.show();
         $assign.hide();
       }
     }
   }
 });
+
+//to do:
+  // - make sure try again is working
+  // - fix so a miss is not needed inbetween scrolldown
+  // - add pictures
+  // - make instructions work
+  // - refactor
+  // - add namespacing
+  // - add sass
+  // - write a read me
+  // - label all functions

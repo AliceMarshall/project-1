@@ -3,9 +3,9 @@ body, html {
 }
 
 body {
-  background-color: white;
-  font-family: 'Kreon', serif;
-  color: midnightblue;
+  background-color: #4B5320;
+  font-family: 'Keania One', cursive;
+  color: #C1C6A5;
 }
 
 main {
@@ -21,28 +21,28 @@ h1 {
   margin: 0 auto;
   font-size: 75px;
   display: block;
-  color: whitesmoke;
-  text-shadow: -1px 0 midnightblue, 0 3px midnightblue, 3px 0 midnightblue, 0 -1px midnightblue;
+  color: #060601;
+  text-shadow: -1px 0 whitesmoke, 0 3px whitesmoke, 3px 0 whitesmoke, 0 -1px whitesmoke;
 }
 
 h1 p {
   display: inline;
-  color: midnightblue;
-  text-shadow: 0 0 slategrey, 0 3px slategrey, 3px 0 slategrey, 0 0 slategrey;
+  color: slategrey;
+  text-shadow: -1px 0 #060601, 0 3px #060601, 3px 0 #060601, 0 -1px #060601;
 }
 
 button {
   margin: 10px;
   background-color: whitesmoke;
   border-radius: 5px;
-  color: midnightblue;
+  color: #060601;
   padding: 5px 10px;
   text-align: center;
   text-decoration: none;
   display: inline-block;
   font-size: 18px;
   font-weight: 200;
-  font-family: 'Kreon', serif;
+  font-family: 'Keania One', cursive;
   outline: none;
   outline-color: none;
   width: 160px
@@ -50,7 +50,7 @@ button {
 
 button:hover {
   color: whitesmoke;
-  background-color: midnightblue;
+  background-color: #060601;
 }
 
 .play-button.instructions {
@@ -100,22 +100,22 @@ button:hover {
 .board1 {
   width: 40px;
   height: 40px;
-  background-color: #63B8FF;
+  background-color: #C1C6A5;
   background-size: cover;
   display: inline-block;
   vertical-align: top;
   text-align: center;
-  border: 1px solid midnightblue;
+  border: 1px solid white;
 }
 .board2 {
   width: 40px;
   height: 40px;
-  background-color: #63B8FF;
+  background-color: #C1C6A5;
   background-size: cover;
   display: inline-block;
   vertical-align: top;
   text-align: center;
-  border: 1px solid midnightblue;
+  border: 1px solid white;
 }
 
 .assign {
@@ -143,9 +143,9 @@ button:hover {
 .select {
   background: transparent;
   border: none;
-  font-family: 'Kreon', sans-serif;
+  font-family: 'Keania One', cursive;
   font-size: 20px;
-  color: midnightblue;
+  color: #060601;
   height: 29px;
   padding: 5px;
   width: 230px;
@@ -153,12 +153,12 @@ button:hover {
 }
 
 span {
-  color: red;
+  color: #060601;
 }
 
 .result {
   font-size: 70px;
-  color: midnightblue;
+  color: #060601;
   padding-top: 220px;
   text-align: center;
 }
@@ -169,11 +169,11 @@ span {
 }
 
 .ship {
-  background-color: dimgrey;
+  background-color: #060601;
 }
 
 .miss {
-  background-color: white;
+  background-color: slategrey;
 }
 
 .hit {
