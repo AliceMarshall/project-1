@@ -1,6 +1,6 @@
-body, html {
+/*body, html {
   overflow: hidden;
-}
+}*/
 
 body {
   background-image: url('../images/camo.jpg');
@@ -210,5 +210,15 @@ span {
 }
 
 img {
-  max-height: 600px;
+  max-height: 500px;
+  left:0px;
+  top:0px;
+  z-index:-1;
+}
+
+img #ban {
+  height: 550px;
+  left:40px;
+  top:10px;
+  z-index:-1;
 }

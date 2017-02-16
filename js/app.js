@@ -1,32 +1,35 @@
+
+//   ----- CONSTANT -- VARIABLES -----
+const width = 10;       // width of the each board
+const coordObj = {};    // calculates the coordinates of the boards - used in makeCoords function
 // Constants for creating divs/cells within the boards
 const div = '<div class="board1"></div>';
 const div2 = '<div class="board2"></div>';
 const allCells = 100;
-
-// Object and array of battleships used in placing ships, hit/miss ships
+// Object and arrays of battleships used in placing ships, hit/miss ships, and result arrays
 const boats = {'Carrier': 5, 'Battleship': 4, 'Submarine': 3, 'Cruiser': 3, 'Destroyer': 2};
 const boatsArray = [5,4,3,3,2];
-
-const width = 10;       // width of the each board
-
+const imgArray = ['<img src="images/hitler.jpg" alt="Adolf Hilter">', '<img src="images/kim.jpg" alt="Kim Il Sung">', '<img src="images/Saddam.jpg" alt="Saddam Hussein">', '<img src="images/stalin.jpg" alt="Joesph Stalin">', '<img src="images/mugabe.jpg" alt="Robert Mugabe">'];
+const resultArray = ['Adolf Hitler', 'Kim Il Sung', 'Saddam Hussein', 'Joesph Stalin', 'Robert Mugabe'];
+// Object and array used for the attackGo function - Computer AI
 const changeIndexObj = {'north': - width, 'east': 1, 'south': width, 'west': - 1};
 const moves = ['north', 'east', 'south', 'west'];
 
+//   ----- VARIABLES -----
 let cellIndex = null;   // the index of the cell clicked
 let orientation = 'x';  // initial orientation of ship being placed
 let computer = true;    // computer set to true when placing the ships on the computers board false when placing players ships
 let selection = null;   // the selected value of the form select set to null - used in $board1.on('click') function
 let shipPositions = []; // shipPositions gets filled with the arrays on the ship's postions on the computers board.
-let x;
-let y;
-let coordObj;
-let attackMode = false;
-let hitX = 1;
-let hitY = 1;
-let hitIndex;
-let newCell = null;
-let countPlayer;
-let countComp;
+let x;                  // the horizontal variable
+let y;                  // the vertical variable
+let attackMode = false; // attackMode is set to false until the computer finds a hit, then set to true.
+let hitX = 1;           // is the x coordinate of cell that has a hit in computers turn
+let hitY = 1;           // the y coordinate of cell that has a hit in computers turn
+let hitIndex;           // the index of the cell that was hit within the board array
+let newCell = null;     // the cell that was found in attackGo.
+let countPlayer;        // the number of hits on board2
+let countComp;          // the number of hits on board1
 
 // check if you sunk a whole ship every time someone clicks - used in winLoseCheck
 function add(a, b) {
@@ -34,10 +37,13 @@ function add(a, b) {
 }
 
 $(() => {
-
+  //   ----- CONSTANT -- VARIABLES -----
   // Creates the 10x10 board grids
   const $boardOne = $('.boardOne');   // the div with class boardOne
   const $boardTwo = $('.boardTwo');   // the div with class boardTwo
+//
+  const $midResult = $('.mid-result');
+  const $resultImage = $('.result-image');
 
   for (var i = 0; i < allCells; i++) {
     $boardOne.append($(div));
@@ -186,11 +192,6 @@ $(() => {
     }
   }
 
-  const $midResult = $('.mid-result');
-  const resultArray = ['Adolf Hitler', 'Kim Il Sung', 'Saddam Hussein', 'Joesph Stalin', 'Robert Mugabe'];
-  const $resultImage = $('.result-image');
-  const imgArray = ['<img src="images/hitler.jpg" alt="Adolf Hilter">', '<img src="images/kim.jpg" alt="Kim Il Sung">', '<img src="images/Saddam.jpg" alt="Saddam Hussein">', '<img src="images/stalin.jpg" alt="Joesph Stalin">', '<img src="images/mugabe.jpg" alt="Robert Mugabe">'];
-
   // function that checks if a single ship has been hit.
   function hitAShip() {
     // let shipHit = 0;
@@ -200,7 +201,7 @@ $(() => {
           shipPositions[i].splice(j, 1);
           if (shipPositions[i].length === 0) {
             $midResult.text(`You sunk ${resultArray[i]}'s DictatorShip`);
-            $resultImage.html(imgArray[i]);
+            $resultImage.append(imgArray[i]);
             scrollDown();
           }
         }
@@ -263,12 +264,12 @@ $(() => {
       computersGo();
     }
     hitAShip();
+    // $(`.${hit}`).attr('disabled', true);
   }
 
   // creates coordinates for the boards to be used in attackMode = true and attackGo function
   function makeCoords() {
-    coordObj = {};
-    for (i = 0; i < allCells; i++) {
+    for (let i = 0; i < allCells; i++) {
       if (i % width === 0) {
         x = (i % width) + 1;
         y = (i / 10) + 1;
@@ -374,7 +375,7 @@ $(() => {
   function winLoseCheck() {
     countPlayer = $('.board2.hit').length;
     countComp = $('.board1.hit').length;
-    for (i = 0; i < $board2.length; i++) {
+    for (let i = 0; i < $board2.length; i++) {
       winnerResult();
     }
   }
