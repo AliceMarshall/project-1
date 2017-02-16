@@ -32,18 +32,16 @@ When the player has hit a whole DictatorShip a 2 second scroll down will occur s
 
 **Copyright &#169;**
 
-I own none of the images or background used in the game.
+I own none of the images or background used in the game. All other work is my own.
 
 ####Challenges & Problems
 
-The main challenges I had whilst building the game was in my method of working and creating AI for the computer's turn. I should have worked slower, to create DRYer code from the get-go instead of creating several similar functions and then trying to refactor them down. I also struggled when creating a function to place intelligent moves. I would have liked to take this further with more time, to ultimately make it think like a human.
+The main challenges I had whilst building the game was in my method of working and creating AI for the computer's turn. I should have worked slower, to create DRYer code from the get-go instead of creating several similar functions and then trying to refactor them down. This would have ultimately saved me more time. I also struggled when creating a function to place intelligent moves. I would have liked to take this further with more time, to ultimately make it think like a human.
 
-Other features I would liked to have had time to add were animations or sound effects. I also had different ideas for themes for the game, so the player could choose
+Other features I would liked to have had time to add were animations or sound effects. I also had different ideas for themes for the game, so the player could choose what theme they wanted to play. For example: 'Sink the RelationShips'.
 
 **Features & Bugs**
 
 - You can only view the Instructions just after the page has loaded, once *Play Game* has been clicked on it will no longer be visable.
 - If a DictatorShip other than the last DictatorShip placed is placed in the top left-hand corner of the Player Board, you will not be able to place any of the remaining DictatorShip.
 
-
-with explanations of the technologies used, the approach taken, installation instructions, unsolved problems, etc.
