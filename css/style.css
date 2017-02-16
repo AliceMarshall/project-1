@@ -121,6 +121,10 @@ button:hover {
   border: 1px solid white;
 }
 
+div .board2:hover {
+  cursor: crosshair;
+}
+
 .assign {
   display: inline;
   font-size: 20px;
@@ -161,7 +165,7 @@ span {
 
 .result {
   font-size: 70px;
-  color: #060601;
+  color: whitesmoke;
   padding-top: 220px;
   text-align: center;
 }
@@ -191,16 +195,20 @@ span {
   /*z-index: -2;*/
 }
 
-h2 {
-  margin: 20px auto;
+.result-image {
+  margin: 30px auto;
   display: block;
   text-align: center;
   font-size: 60px;
   max-width: 960px;
 }
 
+.mid-result {
+  font-size: 60px;
+  margin: 30px auto;
+  text-align: center;
+}
 
 img {
-  margin: 10px -3px;
-  text-align: center;
+  max-height: 600px;
 }

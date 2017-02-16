@@ -3,6 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <script src="https://code.jquery.com/jquery-1.10.2.js"></script>
     <title>Sink the DictatorShips</title>
     <link href="https://fonts.googleapis.com/css?family=Keania+One" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css">
@@ -15,19 +16,16 @@
     <h1>Sink the Dictator<p id="word-ships">Ships</p></h1>
     <button type="button" class="play-button">Play Game</button>
     <button type="button" class="instructions-button">Instructions</button>
-    <div class="instructions">
+    <!-- <div class="instructions">
       <ol>
         <li>Ships can only be placed horizontally or vertically across grid spaces, and can't hang over the outer grid boundary. It will return 'Try Again'</li>
         <li>Ships are not allowed to share a space with another ship.</li>
         <li>The left board is your board to place ships into.</li>
         <li>When you have placed all ships, you will be directed to 'Start Game !'</li>
         <li>When you 'miss' or 'hit' a ship, the square will appear white or red respectively, and alert you below.</li>
-        <!-- <li>When all of the squares of a ship have been hit, the ship is sunk.</li> -->
-        <!-- <li>Players must announce to their opponent each time one of their ships is sunk. (Example: "You sunk my Battleship!")</li> -->
         <li>The winner is the first player to sink their opponent's ships before all of their own are sunk.</li>
       </ol>
-
-    </div>
+    </div> -->
     <div id="words-left">
       Your board
     </div>
@@ -61,10 +59,9 @@
 
   </main>
   <div id="answer">
-    <div id="brad-jen">
-      <h2>You sunk 's DictatorShip</h2>
-      <div>
-        <img src="#" alt="Adolf Hilter">
+    <div>
+      <div class="mid-result"></div>
+      <div class="result-image">
       </div>
     </div>
   </div>

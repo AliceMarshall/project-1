@@ -28,6 +28,11 @@ let newCell = null;
 let countPlayer;
 let countComp;
 
+// check if you sunk a whole ship every time someone clicks - used in winLoseCheck
+function add(a, b) {
+  return a + b;
+}
+
 $(() => {
 
   // Creates the 10x10 board grids
@@ -108,12 +113,11 @@ $(() => {
   // function used on click for the player to decide where to place their ships.
   function playerPlacesShips(e) {
     selection = $select.val();
+    console.log(selection);
     const length = boats[selection];
     const cellIndex = $board1.index($(e.target));
     placeShips(length, orientation, cellIndex);
   }
-
-  $board1.on('click', playerPlacesShips);
 
   const $cell = $cellsBoard.eq(cellIndex);
   let canPlaceShip = false;
@@ -182,6 +186,11 @@ $(() => {
     }
   }
 
+  const $midResult = $('.mid-result');
+  const resultArray = ['Adolf Hitler', 'Kim Il Sung', 'Saddam Hussein', 'Joesph Stalin', 'Robert Mugabe'];
+  const $resultImage = $('.result-image');
+  const imgArray = ['<img src="images/hitler.jpg" alt="Adolf Hilter">', '<img src="images/kim.jpg" alt="Kim Il Sung">', '<img src="images/Saddam.jpg" alt="Saddam Hussein">', '<img src="images/stalin.jpg" alt="Joesph Stalin">', '<img src="images/mugabe.jpg" alt="Robert Mugabe">'];
+
   // function that checks if a single ship has been hit.
   function hitAShip() {
     // let shipHit = 0;
@@ -190,21 +199,9 @@ $(() => {
         if ($board2.eq(shipPositions[i][j]).hasClass('hit')) {
           shipPositions[i].splice(j, 1);
           if (shipPositions[i].length === 0) {
-            if (i === 0) {
-              scrollDown();
-            }
-            if (i === 1) {
-              scrollDown();
-            }
-            if (i === 2) {
-              scrollDown();
-            }
-            if (i === 3) {
-              scrollDown();
-            }
-            if (i === 4) {
-              scrollDown();
-            }
+            $midResult.text(`You sunk ${resultArray[i]}'s DictatorShip`);
+            $resultImage.html(imgArray[i]);
+            scrollDown();
           }
         }
       }
@@ -231,9 +228,8 @@ $(() => {
       $board2.attr('class', 'board2');
     }
   }
-  // Function for .on click Play Game
-  $playButton.on('click', playGame);
 
+  // Function for .on click Play Game
   function playGame() {
     shipPositions = [];
     $alertPlayer.hide();
@@ -254,7 +250,7 @@ $(() => {
     $board2.off('click');
   }
 
-  // Assign a 'miss'/'hit' background-color/X to the tile that has been clicked
+  // Assign a 'miss'/'hit' background-color to the tile that has been clicked and runs computersGo
   function playerPlays(e) {
     const clicked = $(e.target);
     if (clicked.hasClass('ship')) {
@@ -269,7 +265,7 @@ $(() => {
     hitAShip();
   }
 
-  // create a function that when you click on the board the computer also randomly clicks on the other board, and follow the same hit or miss principles
+  // creates coordinates for the boards to be used in attackMode = true and attackGo function
   function makeCoords() {
     coordObj = {};
     for (i = 0; i < allCells; i++) {
@@ -286,6 +282,7 @@ $(() => {
   }
   makeCoords();
 
+  // function for computer to have a turn clicking on the players board. Runs winLoseCheck function to check if someone has won.
   function computersGo() {
     randomNumber();
     const gameBoard = $board1.eq(cellIndex);
@@ -310,7 +307,7 @@ $(() => {
     winLoseCheck();
   }
 
-  // inside function above it also needs to be smart and when a hit is made it checks all squares adjacent
+  // function that will randomly pick N/E/S/W cell in their next turn, if second hit will run stay in attack mode.
   function attackGo() {
     shuffle(moves);
     const coordCheckObj = {'north': hitY - 1 > 0, 'east': hitX + 1 <= width, 'south': hitY + 1 <= width, 'west': hitX - 1 > 0};
@@ -338,6 +335,8 @@ $(() => {
       computersGo();
     }
   }
+
+  // function that shuffles arrays - used in attackGo
   function shuffle(array) {
     let currentIndex = array.length, temporaryValue, randomIndex;
     while (0 !== currentIndex) {
@@ -350,37 +349,41 @@ $(() => {
     return array;
   }
 
-  // check if you sunk a whole ship every time someone clicks
-  function add(a, b) {
-    return a + b;
+  // function to hide whats on screen and shows final result.
+  function hideBoardShowResult() {
+    $boardOne.hide();
+    $boardTwo.hide();
+    $alertPlayer.hide();
+    $result.show();
+    $assign.hide();
   }
 
+  // function to check if countPlayer/countComp have all ships hit
+  function winnerResult() {
+    if (countPlayer === boatsArray.reduce(add, 0)) {
+      hideBoardShowResult();
+      $result.html(`You sunk the DictatorShips!`);
+    }
+    if (countComp === boatsArray.reduce(add, 0)) {
+      hideBoardShowResult();
+      $result.html(`I sunk the DictatorShips!`);
+    }
+  }
+
+  // function to check if all ships have been hit
   function winLoseCheck() {
     countPlayer = $('.board2.hit').length;
     countComp = $('.board1.hit').length;
     for (i = 0; i < $board2.length; i++) {
-      if (countPlayer === boatsArray.reduce(add, 0)) {
-        $boardOne.hide();
-        $boardTwo.hide();
-        $alertPlayer.hide();
-        $result.html(`You sunk the DictatorShips!`);
-        $result.show();
-        $assign.hide();
-      }
-      if (countComp === boatsArray.reduce(add, 0)) {
-        $boardOne.hide();
-        $boardTwo.hide();
-        $alertPlayer.hide();
-        $result.html(`I sunk the DictatorShips!`);
-        $result.show();
-        $assign.hide();
-      }
+      winnerResult();
     }
   }
+
+  $board1.on('click', playerPlacesShips);
+  $playButton.on('click', playGame);
 });
 
 //to do:
-  // - make sure try again is working
   // - fix so a miss is not needed inbetween scrolldown
   // - add pictures
   // - make instructions work
