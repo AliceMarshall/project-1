@@ -1,6 +1,11 @@
-/*body, html {
+body, html {
   overflow: hidden;
-}*/
+}
+
+.preload {
+  position: absolute;
+  left: -1000000px;
+}
 
 body {
   background-image: url('../images/camo.jpg');
