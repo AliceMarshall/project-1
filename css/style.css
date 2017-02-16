@@ -3,9 +3,13 @@ body, html {
 }
 
 body {
-  background-color: #4B5320;
+  background-image: url('../images/camo.jpg');
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+  margin:0px;
+  height: 100%;
   font-family: 'Keania One', cursive;
-  color: #C1C6A5;
+  color: white;
 }
 
 main {
@@ -94,13 +98,12 @@ button:hover {
   width: 460px;
   display: inline-block;
   margin-top: 15px;
-
 }
 
 .board1 {
   width: 40px;
   height: 40px;
-  background-color: #C1C6A5;
+  background-color: #EAEED3;
   background-size: cover;
   display: inline-block;
   vertical-align: top;
@@ -110,7 +113,7 @@ button:hover {
 .board2 {
   width: 40px;
   height: 40px;
-  background-color: #C1C6A5;
+  background-color: #EAEED3;
   background-size: cover;
   display: inline-block;
   vertical-align: top;
@@ -195,40 +198,7 @@ h2 {
   font-size: 60px;
   max-width: 960px;
 }
-#brad-jen {
-  margin: 0 auto;
-  display: inline-block;
-  text-align: center;
-  position: relative;
-}
 
-#chris-gwyn{
-  margin: 0 auto;
-  display: inline-block;
-  text-align: center;
-  position: relative;
-}
-
-#tom-kat {
-  margin: 0 auto;
-  display: inline-block;
-  text-align: center;
-  position: relative;
-}
-
-#just-brit {
-  margin: 0 auto;
-  display: inline-block;
-  text-align: center;
-  position: relative;
-}
-
-#tay-man {
-  margin: 0 auto;
-  display: inline-block;
-  text-align: center;
-  position: relative;
-}
 
 img {
   margin: 10px -3px;

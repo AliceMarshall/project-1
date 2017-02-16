@@ -1,48 +1,56 @@
+// Constants for creating divs/cells within the boards
+const div = '<div class="board1"></div>';
+const div2 = '<div class="board2"></div>';
+const allCells = 100;
+
+// Object and array of battleships used in placing ships, hit/miss ships
+const boats = {'Carrier': 5, 'Battleship': 4, 'Submarine': 3, 'Cruiser': 3, 'Destroyer': 2};
+const boatsArray = [5,4,3,3,2];
+
+const width = 10;       // width of the each board
+
+const changeIndexObj = {'north': - width, 'east': 1, 'south': width, 'west': - 1};
+const moves = ['north', 'east', 'south', 'west'];
+
+let cellIndex = null;   // the index of the cell clicked
+let orientation = 'x';  // initial orientation of ship being placed
+let computer = true;    // computer set to true when placing the ships on the computers board false when placing players ships
+let selection = null;   // the selected value of the form select set to null - used in $board1.on('click') function
+let shipPositions = []; // shipPositions gets filled with the arrays on the ship's postions on the computers board.
+let x;
+let y;
+let coordObj;
+let attackMode = false;
+let hitX = 1;
+let hitY = 1;
+let hitIndex;
+let newCell = null;
+let countPlayer;
+let countComp;
+
 $(() => {
 
-  //hide all couple divs
-  const $bradJen = $('#brad-jen');
-  const $chrisGwyn = $('#chris-gwyn');
-  const $tomKat = $('#tom-kat');
-  const $justBrit = $('#just-brit');
-  const $tayMan = $('#tay-man');
-  $bradJen.hide();
-  $chrisGwyn.hide();
-  $tomKat.hide();
-  $justBrit.hide();
-  $tayMan.hide();
-
   // Creates the 10x10 board grids
-  const div = '<div class="board1"></div>';
-  const div2 = '<div class="board2"></div>';
-  const $boardOne = $('.boardOne');
-  const $boardTwo = $('.boardTwo');
-  const allCells = 100;
+  const $boardOne = $('.boardOne');   // the div with class boardOne
+  const $boardTwo = $('.boardTwo');   // the div with class boardTwo
 
   for (var i = 0; i < allCells; i++) {
     $boardOne.append($(div));
     $boardTwo.append($(div2));
   }
 
-  // Create instructions toggle
+  // to show and hide the instructions
   const $instructions = $('.instructions');
   $instructions.hide();
 
-  // Creates an object and array of battleships
-  const boats = {'Carrier': 5, 'Battleship': 4, 'Submarine': 3, 'Cruiser': 3, 'Destroyer': 2};
-  const boatsArray = [5,4,3,3,2];
-
-  // Create function that randomly assigns where battleship should be in an array
+  // Function that randomly assigns where battleship should be in an array
   const $board1 = $('.board1');
   const $board2 = $('.board2');
-  const width = 10;
-  let cellIndex = null;
-  let $cellsBoard = $('.board1');
-  let orientation = 'x';
-  let computer = true;
   const $assign = $('.assign');
+  let $cellsBoard = $('.board1');
   $assign.hide();
 
+  // function to change which board is having ships placed on it - used in $playGame function
   function changeBoard() {
     if($cellsBoard.hasClass('board2')) {
       return $cellsBoard = $('.board1');
@@ -51,13 +59,15 @@ $(() => {
     }
   }
 
+  // function that produces random number depending on the boards length - used in ComputerGo function
   function randomNumber() {
     return cellIndex = Math.floor(Math.random() * $cellsBoard.length);
   }
 
-  // Function on click of rotate changes orientation
+  // function $rotate to change orientation, constants used in on click function $rotate
   const $rotate = $('.rotate');
   const $spanOrientation = $('span');
+
   $rotate.on('click', () => {
     if (orientation === 'x') {
       orientation = 'y';
@@ -68,11 +78,12 @@ $(() => {
     }
   });
 
-  // Function that links to what option is in the selection box
+  // function that alerts the player
+  // used in placeShips function
   const $select = $('select');
-  let selection = null;
-  const $alertPlayer = $('.alert-player');
-  $alertPlayer.hide();
+  const $alertPlayer = $('.alert-player');  // div that alerts player if the ship cannot be placed, if they make a hit or a miss.
+
+  $alertPlayer.hide(); // set $alertplayer to hidden unless the criteria are met to be shown, as described above.
 
   function tryAgain() {
     $alertPlayer.fadeIn();
@@ -83,31 +94,36 @@ $(() => {
     }, 1000);
   }
 
+  // function to hide assignment of ships and initiate the player to click on the computers board.
   function hideAssignShips() {
     const $shipsOnBoard = $('.board1.ship');
     if ($shipsOnBoard.length === 17) {
       $assign.hide();
       $alertPlayer.text('Start Game !');
       $alertPlayer.show();
+      $board2.on('click', playerPlays);
     }
   }
 
-  $board1.on('click', (e) => {
+  // function used on click for the player to decide where to place their ships.
+  function playerPlacesShips(e) {
     selection = $select.val();
     const length = boats[selection];
     const cellIndex = $board1.index($(e.target));
     placeShips(length, orientation, cellIndex);
-  });
+  }
 
-  let shipPositions = [];
+  $board1.on('click', playerPlacesShips);
+
+  const $cell = $cellsBoard.eq(cellIndex);
+  let canPlaceShip = false;
+  let $shipsCells = null;
 
   function placeShips(length, orientation, cellIndex) {
     if (computer) {
       orientation = parseInt(Math.random() * 2) === 0 ? 'x' : 'y';
       cellIndex = Math.floor(Math.random() * $cellsBoard.length);
     }
-    const $cell = $cellsBoard.eq(cellIndex);
-
     if ($cell.hasClass('ship')) {
       if (computer) {
         return placeShips(length, orientation, cellIndex);
@@ -116,10 +132,6 @@ $(() => {
         return false;
       }
     }
-
-    let canPlaceShip = false;
-    let $shipsCells = null;
-
     if (orientation === 'x') {
       if ((cellIndex + length - 1) % width < length - 1) {
         if (computer) {
@@ -130,14 +142,11 @@ $(() => {
         }
       }
       $shipsCells = $cellsBoard.slice(cellIndex, cellIndex + length);
-
     } else {
       const cellIndices = [];
       for (let i = 0; i < length; i++) {
         cellIndices.push(cellIndex + (i * width));
-        // console.log(cellIndices);
       }
-
       if (cellIndices[cellIndices.length - 1] > (allCells - 1)) {
         if (computer) {
           return placeShips(length, orientation, cellIndex);
@@ -146,16 +155,13 @@ $(() => {
           return false;
         }
       }
-
       $shipsCells = $cellsBoard.filter((i) => {
         return cellIndices.includes(i);
       });
     }
-
     canPlaceShip = $shipsCells.toArray().every((cell) => {
       return !$(cell).hasClass('ship');
     });
-
     if (!canPlaceShip) {
       if (computer) {
         return placeShips(length, orientation, cellIndex);
@@ -164,7 +170,6 @@ $(() => {
         return false;
       }
     }
-
     $shipsCells.addClass('ship');
     if (!computer) {
       $('option:selected').prop('disabled', true);
@@ -177,8 +182,7 @@ $(() => {
     }
   }
 
-  // const boatsReverse = {5: 'Carrier', 4: 'Battleship', 3: 'Submarine', 3: 'Cruiser', 2: 'Destroyer'};
-
+  // function that checks if a single ship has been hit.
   function hitAShip() {
     // let shipHit = 0;
     for (let i = 0; i < shipPositions.length; i++) {
@@ -187,23 +191,18 @@ $(() => {
           shipPositions[i].splice(j, 1);
           if (shipPositions[i].length === 0) {
             if (i === 0) {
-              $bradJen.show();
               scrollDown();
             }
             if (i === 1) {
-              $chrisGwyn.show();
               scrollDown();
             }
             if (i === 2) {
-              $tomKat.show();
               scrollDown();
             }
             if (i === 3) {
-              $justBrit.show();
               scrollDown();
             }
             if (i === 4) {
-              $tayMan.show();
               scrollDown();
             }
           }
@@ -212,20 +211,16 @@ $(() => {
     }
   }
 
-  const $answer = $('#answer');
-  console.log($answer);
-
+  // function to scrollUp and ScrollDown to the result when you destroy a whole ship.
   function scrollUp() {
-    $('html, body').animate({ scrollTop: '0%' }, 600);
+    $('html, body').animate({ scrollTop: '0%' }, 300);
   }
   function scrollDown() {
-    $('html, body').animate({ scrollTop: '1000%' }, 600);
+    $('html, body').animate({ scrollTop: '1000%' }, 300);
     setTimeout(scrollUp, 2000);
   }
 
-
   // Create a click function that initiates boards and the game.
-
   const $result = $('.result');
   $result.hide();
   const $playButton = $('.play-button');
@@ -237,7 +232,9 @@ $(() => {
     }
   }
   // Function for .on click Play Game
-  $playButton.on('click', () => {
+  $playButton.on('click', playGame);
+
+  function playGame() {
     shipPositions = [];
     $alertPlayer.hide();
     $assign.show();
@@ -254,10 +251,11 @@ $(() => {
     $('option').prop('disabled', false);
     $('option:selected').prop('disabled', true);
     $playButton.html('Play Again ?');
-  });
+    $board2.off('click');
+  }
 
   // Assign a 'miss'/'hit' background-color/X to the tile that has been clicked
-  $board2.on('click', (e) => {
+  function playerPlays(e) {
     const clicked = $(e.target);
     if (clicked.hasClass('ship')) {
       clicked.addClass('hit');
@@ -267,25 +265,11 @@ $(() => {
       clicked.addClass('miss');
       $alertPlayer.text('Miss !');
       computersGo();
-      $bradJen.hide();
-      $chrisGwyn.hide();
-      $tomKat.hide();
-      $justBrit.hide();
-      $tayMan.hide();
     }
     hitAShip();
-  });
+  }
 
   // create a function that when you click on the board the computer also randomly clicks on the other board, and follow the same hit or miss principles
-  let x;
-  let y;
-  let coordObj;
-  let attackMode = false;
-  let hitX = 1;
-  let hitY = 1;
-  // let index;
-  let hitIndex;
-
   function makeCoords() {
     coordObj = {};
     for (i = 0; i < allCells; i++) {
@@ -313,9 +297,7 @@ $(() => {
         gameBoard.addClass('hit');
         attackMode = true;
         hitX = coordObj[cellIndex][0];
-        // console.log(hitX);
         hitY = coordObj[cellIndex][1];
-        // console.log(hitY);
         hitIndex = cellIndex;
       } else if (gameBoard.hasClass('hit')) {
         computersGo();
@@ -325,31 +307,17 @@ $(() => {
         gameBoard.addClass('miss');
       }
     }
-
     winLoseCheck();
   }
 
   // inside function above it also needs to be smart and when a hit is made it checks all squares adjacent
-
-  // let move = 1;
-  let newCell = null;
-  const changeIndexObj = {'north': - width, 'east': 1, 'south': width, 'west': - 1};
-  const moves = ['north', 'east', 'south', 'west'];
-
   function attackGo() {
     shuffle(moves);
     const coordCheckObj = {'north': hitY - 1 > 0, 'east': hitX + 1 <= width, 'south': hitY + 1 <= width, 'west': hitX - 1 > 0};
-    console.log('inside attackGo');
     let successfulMove = false;
-
     for (let i = 0; i < Object.keys(coordCheckObj).length; i++) {
-      console.log(hitY, hitY - 1 > 0);
-      console.log('check', coordCheckObj[moves[i]]);
-
       if (coordCheckObj[moves[i]]) {
         newCell = $board1.eq(hitIndex + changeIndexObj[moves[i]]);
-        console.log(newCell);
-
         if (newCell.hasClass('ship')) {
           newCell.removeClass('ship');
           newCell.addClass('hit');
@@ -365,7 +333,6 @@ $(() => {
         }
       }
     }
-
     if (!successfulMove) {
       attackMode = false;
       computersGo();
@@ -373,12 +340,9 @@ $(() => {
   }
   function shuffle(array) {
     let currentIndex = array.length, temporaryValue, randomIndex;
-  // While there remain elements to shuffle...
     while (0 !== currentIndex) {
-    // Pick a remaining element...
       randomIndex = Math.floor(Math.random() * currentIndex);
       currentIndex -= 1;
-      // And swap it with the current element.
       temporaryValue = array[currentIndex];
       array[currentIndex] = array[randomIndex];
       array[randomIndex] = temporaryValue;
@@ -387,10 +351,6 @@ $(() => {
   }
 
   // check if you sunk a whole ship every time someone clicks
-
-  let countPlayer;
-  let countComp;
-
   function add(a, b) {
     return a + b;
   }
@@ -403,7 +363,7 @@ $(() => {
         $boardOne.hide();
         $boardTwo.hide();
         $alertPlayer.hide();
-        $result.html(`You sunk my DictatorShips!`);
+        $result.html(`You sunk the DictatorShips!`);
         $result.show();
         $assign.hide();
       }
@@ -411,7 +371,7 @@ $(() => {
         $boardOne.hide();
         $boardTwo.hide();
         $alertPlayer.hide();
-        $result.html(`I sunk my DictatorShips!`);
+        $result.html(`I sunk the DictatorShips!`);
         $result.show();
         $assign.hide();
       }
