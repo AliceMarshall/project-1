@@ -37,7 +37,7 @@ h1 {
 h1 p {
   display: inline;
   color: slategrey;
-  text-shadow: -1px 0 #060601, 0 3px #060601, 3px 0 #060601, 0 -1px #060601;
+  text-shadow: -1px 0 whitesmoke, 0 3px whitesmoke, 3px 0 whitesmoke, 0 -1px whitesmoke;
 }
 
 button {
@@ -180,7 +180,7 @@ span {
   padding: 30px;
 }
 
-.ship {
+.board1.ship {
   background-color: #060601;
 }
 
@@ -201,7 +201,7 @@ span {
 }
 
 .result-image {
-  margin: 30px auto;
+  margin: 50px auto 0px;
   display: block;
   text-align: center;
   font-size: 60px;
@@ -214,16 +214,6 @@ span {
   text-align: center;
 }
 
-img {
-  max-height: 500px;
-  left:0px;
-  top:0px;
-  z-index:-1;
-}
-
-img #ban {
-  height: 550px;
-  left:40px;
-  top:10px;
-  z-index:-1;
+#dictator {
+  max-height: 500px
 }
