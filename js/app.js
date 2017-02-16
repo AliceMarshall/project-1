@@ -1,301 +1,300 @@
+var btsp = btsp || {}; //btsp - battleship
 
 //   ----- CONSTANT -- VARIABLES -----
 
-const width = 10;       // width of the each board
-const coordObj = {};    // calculates the coordinates of the boards - used in makeCoords function
+btsp.width = 10;       // width of the each board
+btsp.coordObj = {};    // calculates the coordinates of the boards - used in makeCoords function
 // Constants for creating divs/cells within the boards
-const div = '<div class="board1"></div>';
-const div2 = '<div class="board2"></div>';
+btsp.div = '<div class="board1"></div>';
+btsp.div2 = '<div class="board2"></div>';
 const allCells = 100;
 // Object and arrays of battleships used in placing ships, hit/miss ships, and result arrays
-const boats = {'Carrier': 5, 'Battleship': 4, 'Submarine': 3, 'Cruiser': 3, 'Destroyer': 2};
-const boatsArray = [5,4,3,3,2];
-const imgArray = ['images/hitler.jpg', 'images/kim.jpg', 'images/Saddam.jpg', 'images/stalin.jpg', 'images/mugabe.jpg'];
-const resultArray = ['Adolf Hitler', 'Kim Il Sung', 'Saddam Hussein', 'Joesph Stalin', 'Robert Mugabe'];
+btsp.boats = {'Carrier': 5, 'Battleship': 4, 'Submarine': 3, 'Cruiser': 3, 'Destroyer': 2};
+btsp.boatsArray = [5,4,3,3,2];
+btsp.imgArray = ['images/hitler.jpg', 'images/kim.jpg', 'images/Saddam.jpg', 'images/stalin.jpg', 'images/mugabe.jpg'];
+btsp.resultArray = ['Adolf Hitler', 'Kim Il Sung', 'Saddam Hussein', 'Joesph Stalin', 'Robert Mugabe'];
 // Object and array used for the attackGo function - Computer AI
-const changeIndexObj = {'north': - width, 'east': 1, 'south': width, 'west': - 1};
-const moves = ['north', 'east', 'south', 'west'];
+btsp.changeIndexObj = {'north': - btsp.width, 'east': 1, 'south': btsp.width, 'west': - 1};
+btsp.moves = ['north', 'east', 'south', 'west'];
 
 //   ----- VARIABLES -----
 
 let cellIndex = null;   // the index of the cell clicked
 let orientation = 'x';  // initial orientation of ship being placed
-let computer = true;    // computer set to true when placing the ships on the computers board false when placing players ships
-let selection = null;   // the selected value of the form select set to null - used in $board1.on('click') function
-let shipPositions = []; // shipPositions gets filled with the arrays on the ship's postions on the computers board.
-let x;                  // the horizontal variable
-let y;                  // the vertical variable
-let attackMode = false; // attackMode is set to false until the computer finds a hit, then set to true.
-let hitX = 1;           // is the x coordinate of cell that has a hit in computers turn
-let hitY = 1;           // the y coordinate of cell that has a hit in computers turn
-let hitIndex;           // the index of the cell that was hit within the board array
-let newCell = null;     // the cell that was found in attackGo.
-let countPlayer;        // the number of hits on board2
-let countComp;          // the number of hits on board1
+btsp.computer = true;    // computer set to true when placing the ships on the computers board false when placing players ships
+btsp.selection = null;   // the selected value of the form select set to null - used in $board1.on('click') function
+btsp.shipPositions = []; // shipPositions gets filled with the arrays on the ship's postions on the computers board.
+btsp.x;                  // the horizontal variable
+btsp.y;                  // the vertical variable
+btsp.attackMode = false; // attackMode is set to false until the computer finds a hit, then set to true.
+btsp.hitX = 1;           // is the x coordinate of cell that has a hit in computers turn
+btsp.hitY = 1;           // the y coordinate of cell that has a hit in computers turn
+btsp.hitIndex;           // the index of the cell that was hit within the board array
+btsp.newCell = null;     // the cell that was found in attackGo.
+btsp.countPlayer;        // the number of hits on board2
+btsp.countComp;          // the number of hits on board1
 
 //   ---- FUNCTION ---
 
 // check if you sunk a whole ship every time someone clicks - used in winLoseCheck
-function add(a, b) {
+btsp.add = function(a, b) {
   return a + b;
-}
+};
 
-$(() => {
+btsp.setup = function() {
+
   //   ---- CONSTANT -- VARIABLES ----
 
   // Creates the 10x10 board grids
-  const $boardOne = $('.boardOne');   // the div with class boardOne
-  const $boardTwo = $('.boardTwo');   // the div with class boardTwo
-  const $dictatorImg = $('#dictator');
+  btsp.$boardOne = $('.boardOne');   // the div with class boardOne
+  btsp.$boardTwo = $('.boardTwo');   // the div with class boardTwo
+  btsp.$dictatorImg = $('#dictator');
 //
-  const $select = $('select');
-  const $alertPlayer = $('.alert-player');
+  btsp.$select = $('select');
+  btsp.$alertPlayer = $('.alert-player');
 //
-  const $midResult = $('.mid-result');
+  btsp.$midResult = $('.mid-result');
   // constants used in on click function $rotate
-  const $rotate = $('.rotate');
-  const $spanOrientation = $('span');
+  btsp.$rotate = $('.rotate');
+  btsp.$spanOrientation = $('span');
   //
-  const $result = $('.result');
-  const $playButton = $('.play-button');
+  btsp.$result = $('.result');
+  btsp.$playButton = $('.play-button');
 
   //   ---- ON LOAD FUNCTIONS ----
 
   // function to create board cells
-  function createBoardCells() {
+  btsp.createBoardCells = function() {
     for (let i = 0; i < allCells; i++) {
-      $boardOne.append($(div));
-      $boardTwo.append($(div2));
+      this.$boardOne.append($(this.div));
+      this.$boardTwo.append($(this.div2));
     }
-  }
+  };
 
   // function to create coordinates for the boards to be used in attackMode = true and attackGo function
-  function makeCoords() {
+  btsp.makeCoords = function() {
     for (let i = 0; i < allCells; i++) {
-      if (i % width === 0) {
-        x = (i % width) + 1;
-        y = (i / 10) + 1;
-        coordObj[i] = [x,y];
-      } else if (i % width === 1 || i % width === 2 || i % width === 3 || i % width === 4 || i % width === 5 || i % width === 6 || i % width === 7 || i % width === 8 || i % width === 9) {
-        x = (i % width) + 1;
-        y = Math.ceil(i / 10);
-        coordObj[i] = [x,y];
+      if (i % this.width === 0) {
+        this.x = (i % this.width) + 1;
+        this.y = (i / 10) + 1;
+        this.coordObj[i] = [this.x,this.y];
+      } else if (i % this.width === 1 || i % this.width === 2 || i % this.width === 3 || i % this.width === 4 || i % this.width === 5 || i % this.width === 6 || i % this.width === 7 || i % this.width === 8 || i % this.width === 9) {
+        this.x = (i % this.width) + 1;
+        this.y = Math.ceil(i / 10);
+        this.coordObj[i] = [this.x,this.y];
       }
     }
-  }
-  createBoardCells();
-  makeCoords();
+  };
+  btsp.createBoardCells();
+  btsp.makeCoords();
 
   //   ---- VARIABLES ----
-  let $cellsBoard = $('.board1');
-  let canPlaceShip = false;
-  let $shipsCells = null;
+  btsp.$cellsBoard = $('.board1');
+  btsp.canPlaceShip = false;
+  btsp.$shipsCells = null;
 
   //   ---- CONSTANTS ----
   // board/assign div constants
-  const $board1 = $('.board1');
-  const $board2 = $('.board2');
-  const $assign = $('.assign');
-  const $cell = $cellsBoard.eq(cellIndex);
+  btsp.$board1 = $('.board1');
+  btsp.$board2 = $('.board2');
+  btsp.$assign = $('.assign');
+  btsp.$cell = btsp.$cellsBoard.eq(cellIndex);
 
   //   ---- HIDE ON LOAD ----
-  $assign.hide();
-  $alertPlayer.hide();    // div that alerts player if the ship cannot be placed, if they make a hit or a miss.
-  $result.hide();
+  btsp.$assign.hide();
+  btsp.$alertPlayer.hide();    // div that alerts player if the ship cannot be placed, if they make a hit or a miss.
+  btsp.$result.hide();
 
   //   ---- FUNCTIONS ----
   // function to change which board is having ships placed on it - used in $playGame function
-  function changeBoard() {
-    if($cellsBoard.hasClass('board2')) {
-      return $cellsBoard = $('.board1');
+  btsp.changeBoard = function() {
+    if(this.$cellsBoard.hasClass('board2')) {
+      return this.$cellsBoard = $('.board1');
     } else {
-      return $cellsBoard = $('.board2');
+      return this.$cellsBoard = $('.board2');
     }
-  }
+  };
 
   // function that produces random number depending on the boards length - used in ComputerGo function
-  function randomNumber() {
-    return cellIndex = Math.floor(Math.random() * $cellsBoard.length);
-  }
+  btsp.randomNumber = function() {
+    return cellIndex = Math.floor(Math.random() * this.$cellsBoard.length);
+  };
 
   // function $rotate to change orientation,
-  function rotation() {
+  btsp.rotation = function() {
     if (orientation === 'x') {
       orientation = 'y';
-      $spanOrientation.html('vertical');
+      this.$spanOrientation.html('vertical');
     } else {
       orientation = 'x';
-      $spanOrientation.html('horizontal');
+      this.$spanOrientation.html('horizontal');
     }
-  }
+  };
 
   // function set $alertplayer to hidden unless the criteria are met
-  function tryAgain() {
-    $alertPlayer.fadeIn();
-    $assign.hide();
+  btsp.tryAgain = function() {
+    btsp.$alertPlayer.fadeIn();
+    btsp.$assign.hide();
     setTimeout(function() {
-      $alertPlayer.hide();
-      $assign.show();
+      btsp.$alertPlayer.hide();
+      btsp.$assign.show();
     }, 1000);
-  }
+  };
 
   // function to hide assignment of ships and initiate the player to click on the computers board.
-  function hideAssignShips() {
-    const $shipsOnBoard = $('.board1.ship');
-    if ($shipsOnBoard.length === 17) {
-      $assign.hide();
-      $alertPlayer.text('Start Game !');
-      $alertPlayer.show();
-      $board2.on('click', playerPlays);
+  btsp.hideAssignShips = function() {
+    this.$shipsOnBoard = $('.board1.ship');
+    if (this.$shipsOnBoard.length === 17) {
+      btsp.$assign.hide();
+      btsp.$alertPlayer.text('Start Game !');
+      btsp.$alertPlayer.show();
+      this.$board2.on('click', this.playerPlays);
     }
-  }
+  };
 
   // function used on click for the player to decide where to place their ships.
-  function playerPlacesShips(e) {
-    selection = $select.val();
-    console.log(selection);
-    const length = boats[selection];
-    const cellIndex = $board1.index($(e.target));
-    placeShips(length, orientation, cellIndex);
-  }
+  btsp.playerPlacesShips = function(e) {
+    this.selection = this.$select.val();
+    const length = this.boats[this.selection];
+    cellIndex = this.$board1.index($(e.target));
+    this.placeShips(length, orientation, cellIndex);
+  };
 
-
-  function placeShips(length, orientation, cellIndex) {
-    if (computer) {
+  btsp.placeShips = function(length, orientation, cellIndex) {
+    if (this.computer) {
       orientation = parseInt(Math.random() * 2) === 0 ? 'x' : 'y';
-      cellIndex = Math.floor(Math.random() * $cellsBoard.length);
+      cellIndex = Math.floor(Math.random() * this.$cellsBoard.length);
     }
-    if ($cell.hasClass('ship')) {
-      if (computer) {
-        return placeShips(length, orientation, cellIndex);
+    if (this.$cell.hasClass('ship')) {
+      if (this.computer) {
+        return this.placeShips(length, orientation, cellIndex);
       } else {
-        tryAgain();
+        this.tryAgain();
         return false;
       }
     }
     if (orientation === 'x') {
-      if ((cellIndex + length - 1) % width < length - 1) {
-        if (computer) {
-          return placeShips(length, orientation, cellIndex);
+      if ((cellIndex + length - 1) % this.width < length - 1) {
+        if (this.computer) {
+          return this.placeShips(length, orientation, cellIndex);
         } else {
-          tryAgain();
+          this.tryAgain();
           return false;
         }
       }
-      $shipsCells = $cellsBoard.slice(cellIndex, cellIndex + length);
+      this.$shipsCells = this.$cellsBoard.slice(cellIndex, cellIndex + length);
     } else {
-      const cellIndices = [];
+      btsp.cellIndices = [];
       for (let i = 0; i < length; i++) {
-        cellIndices.push(cellIndex + (i * width));
+        this.cellIndices.push(cellIndex + (i * this.width));
       }
-      if (cellIndices[cellIndices.length - 1] > (allCells - 1)) {
-        if (computer) {
-          return placeShips(length, orientation, cellIndex);
+      if (this.cellIndices[this.cellIndices.length - 1] > (allCells - 1)) {
+        if (this.computer) {
+          return this.placeShips(length, orientation, cellIndex);
         } else {
-          tryAgain();
+          this.tryAgain();
           return false;
         }
       }
-      $shipsCells = $cellsBoard.filter((i) => {
-        return cellIndices.includes(i);
+      this.$shipsCells = this.$cellsBoard.filter((i) => {
+        return this.cellIndices.includes(i);
       });
     }
-    canPlaceShip = $shipsCells.toArray().every((cell) => {
+    this.canPlaceShip = this.$shipsCells.toArray().every((cell) => {
       return !$(cell).hasClass('ship');
     });
-    if (!canPlaceShip) {
-      if (computer) {
-        return placeShips(length, orientation, cellIndex);
+    if (!this.canPlaceShip) {
+      if (this.computer) {
+        return this.placeShips(length, orientation, cellIndex);
       } else {
-        tryAgain();
+        this.tryAgain();
         return false;
       }
     }
-    $shipsCells.addClass('ship');
-    if (!computer) {
+    this.$shipsCells.addClass('ship');
+    if (!this.computer) {
       $('option:selected').prop('disabled', true);
       $('option').eq(0).prop('selected', true);
-      hideAssignShips();
+      this.hideAssignShips();
     } else {
-      shipPositions.push($shipsCells.toArray().map((cell) => {
+      this.shipPositions.push(this.$shipsCells.toArray().map((cell) => {
         return $(cell).index();
       }));
     }
-  }
+  };
 
   // function to clears classes
-  function clearClasses() {
+  btsp.clearClasses = function() {
     for (var i = 0; i < allCells; i++) {
-      $board1.attr('class', 'board1');
-      $board2.attr('class', 'board2');
+      this.$board1.attr('class', 'board1');
+      this.$board2.attr('class', 'board2');
     }
-  }
+  };
 
   // Function for .on click Play Game
-  function playGame() {
-    shipPositions = [];
-    $alertPlayer.hide();
-    $assign.show();
-    changeBoard();
-    computer = true;
-    clearClasses();
-    $boardOne.show();
-    $boardTwo.show();
-    $result.hide();
-    boatsArray.forEach((length, orientation, cellIndex) => placeShips(length, orientation, cellIndex));
-    console.log('shipPositions', shipPositions);
-    changeBoard();
-    computer = false;
+  btsp.playGame = function() {
+    this.shipPositions = [];
+    btsp.$alertPlayer.hide();
+    btsp.$assign.show();
+    this.changeBoard();
+    this.computer = true;
+    this.clearClasses();
+    this.$boardOne.show();
+    this.$boardTwo.show();
+    this.$result.hide();
+    this.boatsArray.forEach((length, orientation, cellIndex) => this.placeShips(length, orientation, cellIndex));
+    this.changeBoard();
+    this.computer = false;
     $('option').prop('disabled', false);
     $('option:selected').prop('disabled', true);
-    $playButton.html('Play Again ?');
-    $board2.off('click');
-    $alertPlayer.text('Try Again');
-  }
+    this.$playButton.html('Play Again ?');
+    this.$board2.off('click');
+    btsp.$alertPlayer.text('Try Again');
+  };
 
   // Assign a 'miss'/'hit' background-color to the tile that has been clicked and runs computersGo
-  function playerPlays(e) {
-    const clicked = $(e.target);
-    if(clicked.hasClass('hit') || clicked.hasClass('miss')) return false;
-    if (clicked.hasClass('ship')) {
-      clicked.addClass('hit');
-      $alertPlayer.text('Hit !');
-      computersGo();
+  btsp.playerPlays = function(e) {
+    this.clicked = $(e.target);
+    if(this.clicked.hasClass('hit') || this.clicked.hasClass('miss')) return false;
+    if (this.clicked.hasClass('ship')) {
+      this.clicked.addClass('hit');
+      btsp.$alertPlayer.text('Hit !');
+      btsp.computersGo();
     } else {
-      clicked.addClass('miss');
-      $alertPlayer.text('Miss !');
-      computersGo();
+      this.clicked.addClass('miss');
+      btsp.$alertPlayer.text('Miss !');
+      btsp.computersGo();
     }
-    hitAShip();
-  }
+    btsp.hitAShip();
+  };
 
   // function for computer to have a turn clicking on the players board. Runs winLoseCheck function to check if someone has won.
-  function computersGo() {
-    randomNumber();
-    const gameBoard = $board1.eq(cellIndex);
-    if (attackMode) {
-      attackGo();
+  btsp.computersGo = function() {
+    this.randomNumber();
+    btsp.gameBoard = this.$board1.eq(cellIndex);
+    if (this.attackMode) {
+      this.attackGo();
     } else {
-      if (gameBoard.hasClass('ship')) {
-        gameBoard.removeClass('ship');
-        gameBoard.addClass('hit');
-        attackMode = true;
-        hitX = coordObj[cellIndex][0];
-        hitY = coordObj[cellIndex][1];
-        hitIndex = cellIndex;
-      } else if (gameBoard.hasClass('hit')) {
-        computersGo();
-      } else if (gameBoard.hasClass('miss')) {
-        computersGo();
+      if (this.gameBoard.hasClass('ship')) {
+        this.gameBoard.removeClass('ship');
+        this.gameBoard.addClass('hit');
+        this.attackMode = true;
+        this.hitX = this.coordObj[cellIndex][0];
+        this.hitY = this.coordObj[cellIndex][1];
+        this.hitIndex = cellIndex;
+      } else if (this.gameBoard.hasClass('hit')) {
+        this.computersGo();
+      } else if (this.gameBoard.hasClass('miss')) {
+        this.computersGo();
       } else {
-        gameBoard.addClass('miss');
+        this.gameBoard.addClass('miss');
       }
     }
-    winLoseCheck();
-  }
+    this.winLoseCheck();
+  };
 
   // function that shuffles arrays - used in attackGo
-  function shuffle(array) {
+  btsp.shuffle = function(array) {
     let currentIndex = array.length, temporaryValue, randomIndex;
     while (0 !== currentIndex) {
       randomIndex = Math.floor(Math.random() * currentIndex);
@@ -305,101 +304,102 @@ $(() => {
       array[randomIndex] = temporaryValue;
     }
     return array;
-  }
+  };
 
   // function that will randomly pick N/E/S/W cell in their next turn, if second hit will run stay in attack mode.
-  function attackGo() {
-    shuffle(moves);
-    const coordCheckObj = {'north': hitY - 1 > 0, 'east': hitX + 1 <= width, 'south': hitY + 1 <= width, 'west': hitX - 1 > 0};
-    let successfulMove = false;
-    for (let i = 0; i < Object.keys(coordCheckObj).length; i++) {
-      if (coordCheckObj[moves[i]]) {
-        newCell = $board1.eq(hitIndex + changeIndexObj[moves[i]]);
-        if (newCell.hasClass('ship')) {
-          newCell.removeClass('ship');
-          newCell.addClass('hit');
-          successfulMove = true;
+  btsp.attackGo = function() {
+    this.shuffle(this.moves);
+    btsp.coordCheckObj = {'north': this.hitY - 1 > 0, 'east': this.hitX + 1 <= this.width, 'south': this.hitY + 1 <= this.width, 'west': this.hitX - 1 > 0};
+    this.successfulMove = false;
+    for (let i = 0; i < Object.keys(this.coordCheckObj).length; i++) {
+      if (this.coordCheckObj[this.moves[i]]) {
+        this.newCell = this.$board1.eq(this.hitIndex + this.changeIndexObj[this.moves[i]]);
+        if (this.newCell.hasClass('ship')) {
+          this.newCell.removeClass('ship');
+          this.newCell.addClass('hit');
+          this.successfulMove = true;
           break;
-        } else if (newCell.hasClass('hit') || newCell.hasClass('miss')) {
+        } else if (this.newCell.hasClass('hit') || this.newCell.hasClass('miss')) {
           continue;
         } else {
-          newCell.addClass('miss');
-          successfulMove = true;
-          attackMode = false;
+          this.newCell.addClass('miss');
+          this.successfulMove = true;
+          this.attackMode = false;
           break;
         }
       }
     }
-    if (!successfulMove) {
-      attackMode = false;
-      computersGo();
+    if (!this.successfulMove) {
+      this.attackMode = false;
+      this.computersGo();
     }
-  }
+  };
 
   // function that checks if a single ship has been hit.
-  function hitAShip() {
-    // let shipHit = 0;
-    for (let i = 0; i < shipPositions.length; i++) {
-      for (let j = 0; j < shipPositions[i].length; j++) {
-        if ($board2.eq(shipPositions[i][j]).hasClass('hit')) {
-          shipPositions[i].splice(j, 1);
-          if (shipPositions[i].length === 0) {
-            $midResult.text(`You sunk ${resultArray[i]}'s DictatorShip`);
-            $dictatorImg.attr('src', imgArray[i]);
-            scrollDown();
+  btsp.hitAShip = function() {
+    for (let i = 0; i < this.shipPositions.length; i++) {
+      for (let j = 0; j < this.shipPositions[i].length; j++) {
+        if (this.$board2.eq(this.shipPositions[i][j]).hasClass('hit')) {
+          this.shipPositions[i].splice(j, 1);
+          if (this.shipPositions[i].length === 0) {
+            this.$midResult.text(`You sunk ${this.resultArray[i]}'s DictatorShip`);
+            this.$dictatorImg.attr('src', this.imgArray[i]);
+            this.scrollDown();
           }
         }
       }
     }
-  }
+  };
 
   // function to scrollUp and ScrollDown to the result when you destroy a whole ship.
-  function scrollUp() {
+  btsp.scrollUp = function() {
     $('html, body').animate({ scrollTop: '0%' }, 300);
-  }
-  function scrollDown() {
+  };
+  btsp.scrollDown = function() {
     $('html, body').animate({ scrollTop: '1000%' }, 300);
-    setTimeout(scrollUp, 2000);
-  }
+    setTimeout(this.scrollUp, 2000);
+  };
 
   // function to hide whats on screen and shows final result.
-  function hideBoardShowResult() {
-    $boardOne.hide();
-    $boardTwo.hide();
-    $alertPlayer.hide();
-    $result.show();
-    $assign.hide();
-  }
+  btsp.hideBoardShowResult = function() {
+    this.$boardOne.hide();
+    this.$boardTwo.hide();
+    btsp.$alertPlayer.hide();
+    this.$result.show();
+    btsp.$assign.hide();
+  };
 
   // function to check if countPlayer/countComp have all ships hit
-  function winnerResult() {
-    if (countPlayer === boatsArray.reduce(add, 0)) {
-      hideBoardShowResult();
-      $result.html(`You sunk the DictatorShips!`);
+  btsp.winnerResult = function() {
+    if (this.countPlayer === this.boatsArray.reduce(this.add, 0)) {
+      this.hideBoardShowResult();
+      this.$result.html(`You sunk the DictatorShips!`);
     }
-    if (countComp === boatsArray.reduce(add, 0)) {
-      hideBoardShowResult();
-      $result.html(`I sunk the DictatorShips!`);
+    if (this.countComp === this.boatsArray.reduce(this.add, 0)) {
+      this.hideBoardShowResult();
+      this.$result.html(`I sunk the DictatorShips!`);
     }
-  }
+  };
 
   // function to check if all ships have been hit
-  function winLoseCheck() {
-    countPlayer = $('.board2.hit').length;
-    countComp = $('.board1.hit').length;
-    for (let i = 0; i < $board2.length; i++) {
-      winnerResult();
+  btsp.winLoseCheck = function() {
+    this.countPlayer = $('.board2.hit').length;
+    this.countComp = $('.board1.hit').length;
+    for (let i = 0; i < this.$board2.length; i++) {
+      this.winnerResult();
     }
-  }
+  };
 
-  $rotate.on('click', rotation);
-  $board1.on('click', playerPlacesShips);
-  $playButton.on('click', playGame);
-});
+  //   ---- EVENT LISTENERS ----
 
+  this.$rotate.on('click', this.rotation.bind(this));
+  this.$board1.on('click', this.playerPlacesShips.bind(this));
+  this.$playButton.on('click', this.playGame.bind(this));
+};
+
+$(btsp.setup.bind(btsp));
 //to do:
   // - make instructions work
-  // - refactor
   // - add namespacing
   // - add sass
   // - write a read me
