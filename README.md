@@ -4,7 +4,7 @@
 
 In this version of Battleship, the player will instead place DictatorShips on their board and try to hit the computers hidden ones.
 
-Play 'Sink the DictatorShips' [here](https://secure-beyond-16634.herokuapp.com/):
+***Play 'Sink the DictatorShips'*** [***here***](https://secure-beyond-16634.herokuapp.com/):
 
 ####Rules of the Game:
 
