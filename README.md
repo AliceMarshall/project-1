@@ -2,11 +2,11 @@
 
 ###GA WDI London - Project 1
 
-![Image](https://github.com/AliceMarshall/project-1/blob/master/images/Saddam.jpg?raw=true)
-
 In this version of Battleship, the player will instead place DictatorShips on their board and try to hit the computers hidden ones.
 
 ***Play 'Sink the DictatorShips'*** [***here***](https://secure-beyond-16634.herokuapp.com/):
+
+![Image](https://github.com/AliceMarshall/project-1/blob/master/images/my-game.png?raw=true)
 
 ####Rules of the Game:
 
