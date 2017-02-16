@@ -2,15 +2,17 @@
 
 ###GA WDI London - Project 1
 
+![Image](https://github.com/AliceMarshall/project-1/blob/master/images/Saddam.jpg?raw=true)
+
 In this version of Battleship, the player will instead place DictatorShips on their board and try to hit the computers hidden ones.
 
 ***Play 'Sink the DictatorShips'*** [***here***](https://secure-beyond-16634.herokuapp.com/):
 
 ####Rules of the Game:
 
-1. Begin by clicking *Play Game*, this will generate the computers DictatorShip and you will be able to place DictatorShip.
-2. Click the *Select Ship* button to choose which DictatorShip you would like to place. 
-3. Decide on the orientation of the ship, by clicking the *Rotate* button. It is set to horizontal by default. 
+1. Begin by clicking *Play Game*, this will generate the computers DictatorShips and you will be able to place your DictatorShips.
+2. Click the *Select Ship* button to choose which DictatorShip you would like to place.
+3. Decide on the orientation of the ship by clicking the *Rotate* button. It is set to horizontal by default. 
 4. You can now click on Your Board to place your ship. If the place is unavailable it will tell you to Try Again.
 5. Once all DictatorShips have been laid you can Start Game, buy clicking on the Computers Board.
 6. The Game ends when all DictatorShips have been found.
@@ -45,4 +47,3 @@ Other features I would liked to have had time to add were animations or sound ef
 - You can only view the Instructions just after the page has loaded, once *Play Game* has been clicked on it will no longer be visable.
 - If a DictatorShip other than the last DictatorShip placed is placed in the top left-hand corner of the Player Board, you will not be able to place any of the remaining DictatorShip.
 - When the game ends, the final DictatorShip appears with the scroll down, however shows you the result just before, which it shouldn't.
-
