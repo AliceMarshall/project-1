@@ -181,7 +181,8 @@ span {
 }
 
 .result {
-  margin-top: 40px;
+  margin: 40px 0;
+  padding-bottom: 20px;
   font-size: 140px;
   color: black;
   text-align: center;

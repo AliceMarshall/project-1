@@ -44,4 +44,5 @@ Other features I would liked to have had time to add were animations or sound ef
 
 - You can only view the Instructions just after the page has loaded, once *Play Game* has been clicked on it will no longer be visable.
 - If a DictatorShip other than the last DictatorShip placed is placed in the top left-hand corner of the Player Board, you will not be able to place any of the remaining DictatorShip.
+- When the game ends, the final DictatorShip appears with the scroll down, however shows you the result just before, which it shouldn't.
 
