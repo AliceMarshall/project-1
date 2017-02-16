@@ -60,6 +60,9 @@ btsp.setup = function() {
   //
   btsp.$result = $('.result');
   btsp.$playButton = $('.play-button');
+  //
+  btsp.$instuctButton = $('.instructions-button');
+  btsp.$instructions = $('.instructions');
 
   //   ---- ON LOAD FUNCTIONS ----
 
@@ -104,8 +107,21 @@ btsp.setup = function() {
   btsp.$assign.hide();
   btsp.$alertPlayer.hide();    // div that alerts player if the ship cannot be placed, if they make a hit or a miss.
   btsp.$result.hide();
+  btsp.$instructions.hide();
 
   //   ---- FUNCTIONS ----
+  // function to toggle instructions
+  btsp.showHideInstructions = function() {
+    btsp.$instructions.toggle();
+    btsp.$board1.toggle();
+    btsp.$board2.toggle();
+    if (btsp.$playButton.hasClass('disable')) {
+      btsp.$playButton.removeClass('disable');
+    } else {
+      btsp.$playButton.addClass('disable');
+    }
+  };
+
   // function to change which board is having ships placed on it - used in $playGame function
   btsp.changeBoard = function() {
     if(this.$cellsBoard.hasClass('board2')) {
@@ -233,6 +249,8 @@ btsp.setup = function() {
 
   // Function for .on click Play Game
   btsp.playGame = function() {
+    btsp.$instuctButton.text('');
+    btsp.$instuctButton.addClass('disable');
     this.shipPositions = [];
     btsp.$alertPlayer.hide();
     btsp.$assign.show();
@@ -392,6 +410,7 @@ btsp.setup = function() {
 
   //   ---- EVENT LISTENERS ----
 
+  this.$instuctButton.on('click', this.showHideInstructions.bind(this));
   this.$rotate.on('click', this.rotation.bind(this));
   this.$board1.on('click', this.playerPlacesShips.bind(this));
   this.$playButton.on('click', this.playGame.bind(this));

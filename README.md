@@ -2,7 +2,9 @@
 
 ###GA WDI London - Project 1
 
-In this version of Battleships, the player will instead place DictatorShips on their board and try to hit the computers hidden ones.
+In this version of Battleship, the player will instead place DictatorShips on their board and try to hit the computers hidden ones.
+
+Play 'Sink the DictatorShips' [here](https://secure-beyond-16634.herokuapp.com/):
 
 ####Rules of the Game:
 
@@ -15,7 +17,7 @@ In this version of Battleships, the player will instead place DictatorShips on t
 
 ####Approach
 
-
+The 'computers' DictatorShips are randomly placed on its Board from an array of the ships lengths. Ensuring none of the ships are overlaped or off the board vertically or horizontally. Unlike the offical rules to Battleship, ships can be placed directly next to one another, making it easier to win. The same function it run to place the players DictatorShips.
 
 
 **Technologies Used**
@@ -26,6 +28,6 @@ In this version of Battleships, the player will instead place DictatorShips on t
 
 **Copyright &#169;**
 
-I own none of the images used 
+I own none of the images used in the game.
 
 with explanations of the technologies used, the approach taken, installation instructions, unsolved problems, etc.
