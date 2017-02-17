@@ -417,9 +417,3 @@ btsp.setup = function() {
 };
 
 $(btsp.setup.bind(btsp));
-//to do:
-  // - make instructions work
-  // - add namespacing
-  // - add sass
-  // - write a read me
-  // - label all functions
